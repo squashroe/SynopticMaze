@@ -15,6 +15,8 @@ public class Settings {
 
     public static String GAME_DIFFICULTY = "easy";
 
+    public static int MAZE_ROOM_WIDTH = 3;
+    public static int MAZE_ROOM_HEIGHT = 3;
 
 
 }

@@ -1,0 +1,138 @@
+package game.rooms;
+
+import game.configurations.Settings;
+
+import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Random;
+
+public class MazeCreator {
+
+    // create array of rooms here 9 x 9 rooms
+    //define doors on rooms
+    //do recursive algorithm on array
+    //where the algorithm moves to another cell, create passage linking those doors
+    //first passage in sequence will have isExit==true
+/*
+visited cells < room width * room height
+checking of neighbours and boundaries
+
+if true
+move into the neighbour
+push co ordinates of new room to top of stack
+
+new room is visited
+nvisitedCells++
+
+
+Deque<Point> stack = new ArrayDeque<>();
+stack.push(new Point(2,3));
+stack.push(new Point(2,4));
+Point p = stack.pop(); // (2, 4)
+ */
+
+    private Deque<Point> stack = new ArrayDeque<>();
+
+
+    private int nVisitedRooms = 0;
+
+    private int mazeWidth = Settings.MAZE_ROOM_WIDTH;
+    private int mazeHeight = Settings.MAZE_ROOM_HEIGHT;
+    private Room[] maze = new Room[mazeWidth * mazeHeight];
+    private ArrayList<Integer> neighbours = new ArrayList<>();
+
+
+    public void onCreate(){
+
+        maze[0].setVisited(true);
+        maze[0].setLocation(new Point(0,0));
+        stack.push(new Point(0,0));
+        nVisitedRooms = 1;
+    }
+
+    public void createMaze(){
+
+        if (nVisitedRooms < (mazeWidth * mazeHeight)) {
+
+            //create a set of un visted neighbours
+            assert stack.peek() != null;
+
+
+            //checking if a neighbour is NOT visited:
+            //check north
+            if (stack.peek().y > 0) {
+                if (!maze[(stack.peek().y - 1 * mazeWidth) + (stack.peek().x + 0)].isVisited()) {
+                    neighbours.add(0);
+                }
+            }
+            //check east
+            if (stack.peek().x > mazeWidth - 1) {
+                if (!maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 1)].isVisited()) {
+                    neighbours.add(1);
+                }
+            }
+            //check south
+            if (stack.peek().y > mazeHeight - 1) {
+                if (!maze[(stack.peek().y + 1 * mazeWidth) + (stack.peek().x + 0)].isVisited()) {
+                    neighbours.add(2);
+                }
+            }
+            //check west
+            if (stack.peek().x > 0) {
+                if (!maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x - 1)].isVisited()) {
+                    neighbours.add(3);
+                }
+            }
+
+            // are there any neighbours
+
+            if (!neighbours.isEmpty()) {
+                //choose neighbour to move to
+                Random rand = new Random();
+                int nextRoomId = rand.nextInt(neighbours.size());
+
+                switch (nextRoomId) {
+                    case 0: //North
+                        maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 0)].hasDoorNorth();
+                        Passage passageNorth = new Passage(maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 0)].getId(),
+                                maze[(stack.peek().y - 1 * mazeWidth) + (stack.peek().x + 0)].getId());
+                        break;
+                    case 1: //East
+                        maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 1)].hasDoorEast();
+                        Passage passageEast = new Passage(maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 0)].getId(),
+                                maze[(stack.peek().y + 0 * mazeWidth) + (stack.peek().x + 1)].getId());
+                        break;
+                    case 2: //South
+                        maze[(stack.peek().y + 1 * mazeWidth) + (stack.peek().x + 0)].hasDoorSouth();
+                        Passage passageSouth = new Passage(maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 0)].getId(),
+                                maze[(stack.peek().y + 1 * mazeWidth) + (stack.peek().x + 0)].getId());
+                        break;
+                    case 3: //West
+                        maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x - 1)].hasDoorWest();
+                        Passage passageWest = new Passage(maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x + 0)].getId(),
+                                maze[(stack.peek().y + 0 * mazeWidth) + (stack.peek().x - 1)].getId());
+                        break;
+                }
+
+                maze[(stack.peek().y - 0 * mazeWidth) + (stack.peek().x - 1)].isVisited();
+                nVisitedRooms++;
+
+            } else {
+                stack.pop();
+            }
+
+        }
+        for(int x = 0; x < mazeWidth; x++){
+            for (int y = 0; y < mazeHeight; y++) {
+                if (maze[x + y].hasDoorSouth()){
+                    Passage passage = new Passage(maze[x + y].getId(), maze[(x) + y + 1].getId());
+                }
+                if (maze[x + y].hasDoorEast()){
+                    Passage passage = new Passage(maze[x + y].getId(), maze[(x + 1) + y].getId());
+                }
+            }
+        }
+    }
+}

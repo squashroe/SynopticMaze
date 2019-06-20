@@ -6,8 +6,8 @@ public class Passage {
     private int fromDoorId;
     private int toDoorId;
 
-    public Passage(int fromDoorId, int toDoorId) {
-        id++;
+    public Passage(int id, int fromDoorId, int toDoorId) {
+        this.id = id;
         this.fromDoorId = fromDoorId;
         this.toDoorId = toDoorId;
     }
@@ -30,6 +30,10 @@ public class Passage {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 
