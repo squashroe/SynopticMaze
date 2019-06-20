@@ -1,16 +1,20 @@
 package game;
 
 import game.configurations.Settings;
+import game.engine.GameInput;
 import game.engine.MazeCreator;
 import game.menus.MainMenuController;
+import game.player.Player;
 import game.rooms.Room;
 import game.rooms.RoomDesigner;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -20,25 +24,38 @@ public class Main extends Application {
     RoomDesigner roomDesigner = new RoomDesigner();
     @Override
     public void start(Stage primaryStage){
-
-        Group root = new Group();
+        Group gameRoot = new Group();
+        Group menuRoot = new Group();
         MainMenuController mainMenuController = new MainMenuController();
         MazeCreator mazeCreator = new MazeCreator();
 
-        Room room1 = mazeCreator.roomCreator(1, false, null, true, 2,
-                true, 6, true, 5);
+        //make the game and player field
+        gameRoot.getChildren().addAll(mazeCreator.createStartingRoom(), mazeCreator.createPlayer());
+//
+        Scene menuScene = new Scene(menuRoot, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        Scene gameScene = new Scene(gameRoot, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
 
-        root.getChildren().add(roomDesigner.createRoom(room1));
-        mainMenuController.createContent();
-        Scene menuScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        GameInput gameInput = new GameInput(gameScene);
+        gameInput.addListeners();
 
-        primaryStage.setScene(menuScene);
+        primaryStage.setScene(gameScene);
         primaryStage.setOnCloseRequest(event -> {
             bgThread.shutdownNow();
         });
         //MenuInputListener menuInputListener = new MenuInputListener(menuScene);
 //        menuInputListener.addListener();
         primaryStage.show();
+
+        AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+
+                //player Input
+                Settings.getPLAYER().move();
+
+            }
+        };
+        gameLoop.start();
 
 //
     }

@@ -5,9 +5,11 @@ public class Door {
     private int id;
     private boolean active;
     private Integer passageId;
+    private int parentRoomId;
 
-    public Door(int id, boolean active, Integer passageId) {
+    public Door(int id, int parentRoomId, boolean active, Integer passageId) {
         this.id = id;
+        this.parentRoomId = parentRoomId;
         this.active = active;
         this.passageId = passageId;
     }
@@ -18,6 +20,14 @@ public class Door {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getParentRoomId() {
+        return parentRoomId;
+    }
+
+    public void setParentRoomId(int parentRoomId) {
+        this.parentRoomId = parentRoomId;
     }
 
     public boolean isActive() {
@@ -35,4 +45,5 @@ public class Door {
     public void setPassageId(Integer passageId) {
         this.passageId = passageId;
     }
+
 }

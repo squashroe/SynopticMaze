@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RoomDesigner {
 
@@ -17,18 +18,22 @@ public class RoomDesigner {
 
     public RoomDesigner() {
         gc = canvas.getGraphicsContext2D();
-
-
     }
 
 
-    public Pane createRoom(Room room){
+    public Pane createRoomPane(int roomId){
         Pane root = new Pane();
         root.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-
         Rectangle bg = new Rectangle(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-        bg.setFill(Color.SADDLEBROWN);
+        if ((roomId % 2) == 0) {
+            bg.setFill(Color.SADDLEBROWN);
+        }
+        if((roomId % 2) != 0){
+            bg.setFill(Color.WHITE);
+        }
 
+
+        //TODO: add detail to floor
 
         //adds the background and doors to the pane
         root.getChildren().addAll(bg, createDoors());
@@ -38,22 +43,33 @@ public class RoomDesigner {
     public Pane createDoors() {
         Pane doorLayer = new Pane();
         Rectangle doorNorth = new Rectangle(40, 20);
-        doorNorth.relocate(Settings.SCENE_WIDTH /2, 0);
+        doorNorth.relocate(Settings.SCENE_WIDTH /2 -20, 0);
+        //TODO: colour doors
 
         Rectangle doorEast = new Rectangle(20, 40);
-        doorEast.relocate(Settings.SCENE_WIDTH - 20, Settings.SCENE_HEIGHT/2 -40);
+        doorEast.relocate(Settings.SCENE_WIDTH - 20, Settings.SCENE_HEIGHT/2 -20);
 
         Rectangle doorSouth = new Rectangle(40, 25);
-        doorSouth.relocate(Settings.SCENE_WIDTH /2 - 40, Settings.SCENE_HEIGHT - 20);
+        doorSouth.relocate(Settings.SCENE_WIDTH /2 - 20, Settings.SCENE_HEIGHT - 20);
 
         Rectangle doorWest = new Rectangle(20, 40);
-        doorWest.relocate(0, Settings.SCENE_HEIGHT / 2);
+        doorWest.relocate(0, Settings.SCENE_HEIGHT / 2 - 20);
 
 
 
         doorLayer.getChildren().addAll(doorNorth,doorEast,doorSouth,doorWest);
 
         return doorLayer;
+    }
+
+    public Pane createTreasureLayer() {
+        Pane treasureLayer = new Pane();
+        Random rand = new Random();
+        int treasureAmount = rand.nextInt(Settings.THREATS_PER_ROOM + 1);
+        // TODO : insert treasure onto a pane
+
+
+        return treasureLayer;
     }
 
 }
