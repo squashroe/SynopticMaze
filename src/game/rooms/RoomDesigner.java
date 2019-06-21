@@ -1,7 +1,9 @@
 package game.rooms;
 
 import game.configurations.Settings;
+import game.items.Threat;
 import game.items.Treasure;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
@@ -46,10 +48,13 @@ public class RoomDesigner {
 
 
         //adds the background, doors, player, treasure and threats to the pane
-        root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(), createTreasureLayer());
+        root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(),
+                createTreasureLayer(), createThreatLayer());
 
         return root;
     }
+
+
 
     public Pane createDoors() {
         Pane doorLayer = new Pane();
@@ -65,8 +70,6 @@ public class RoomDesigner {
 
         Rectangle doorWest = new Rectangle(20, 40);
         doorWest.relocate(0, Settings.SCENE_HEIGHT / 2 - 20);
-
-
 
         doorLayer.getChildren().addAll(doorNorth,doorEast,doorSouth,doorWest);
 
@@ -86,6 +89,20 @@ public class RoomDesigner {
         }
 
         return treasureLayer;
+    }
+
+    private Pane createThreatLayer() {
+        Pane threatLayer = new Pane();
+        Random rand = new Random();
+        //add threats
+        int amountInRoom = rand.nextInt(Settings.MAX_THREATS_PER_ROOM);
+
+        for (int i = 0; i <amountInRoom; i++) {
+            Threat threat = new Threat(i, rand.nextInt((int)Settings.SCENE_WIDTH - 80),
+                    rand.nextInt((int)Settings.SCENE_HEIGHT - 80), rand.nextInt(3));
+            threatLayer.getChildren().add(threat.getImage());
+        }
+        return threatLayer;
     }
 
 }

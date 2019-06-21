@@ -9,6 +9,7 @@ public class Item {
     private Shape image;
     private double x;
     private double y;
+    private int type;
 
     public Item() {
     }
@@ -64,5 +65,13 @@ public class Item {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -34,7 +34,7 @@ public class Settings {
 
 
     public static int MAX_TREASURE_PER_ROOM = 5;
-    public static int THREATS_PER_ROOM = 5;
+    public static int MAX_THREATS_PER_ROOM = 5;
 
     public static int MAZE_ROOM_WIDTH = 3;
     public static int MAZE_ROOM_HEIGHT = 3;

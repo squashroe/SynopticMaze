@@ -7,7 +7,6 @@ import javafx.scene.shape.Shape;
 public class Treasure extends Item {
 
     private int value;
-    private int type;
 
     public Treasure() {
         super();
