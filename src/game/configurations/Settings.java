@@ -32,8 +32,9 @@ public class Settings {
     public static Scene GAMESCENE;
     public static Pane GAME_PANE;
 
-    public static int TREASURE_PER_ROOM = 3;
-    public static int THREATS_PER_ROOM = 3;
+
+    public static int MAX_TREASURE_PER_ROOM = 5;
+    public static int THREATS_PER_ROOM = 5;
 
     public static int MAZE_ROOM_WIDTH = 3;
     public static int MAZE_ROOM_HEIGHT = 3;
@@ -49,6 +50,7 @@ public class Settings {
     public static Player getPLAYER() {
         return PLAYER;
     }
+    public static int TOTAL_WEALTH;
 
     public static HashMap<Integer, Room> createAllRooms() {
         HashMap<Integer, Room> tempRoomList = new HashMap<>();

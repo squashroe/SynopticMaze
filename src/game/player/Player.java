@@ -2,6 +2,7 @@ package game.player;
 
 import game.configurations.Settings;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
@@ -12,10 +13,6 @@ public class Player {
     private int speed = 7;
     Shape playerImage;
     String playerName = Settings.PLAYER_NAME;
-    private double playerMinX = 7;
-    private double playerMaxX = Settings.SCENE_WIDTH -39;
-    private double playerMinY = 7;
-    private double playerMaxY = Settings.SCENE_HEIGHT -39;
     private boolean moveUp = false;
     private boolean moveDown = false;
     private boolean moveLeft = false;

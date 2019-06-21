@@ -1,14 +1,15 @@
 package game.rooms;
 
 import game.configurations.Settings;
+import game.items.Treasure;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RoomDesigner {
@@ -39,8 +40,14 @@ public class RoomDesigner {
 
         //TODO: add detail to floor
 
-        //adds the background and doors to the pane
-        root.getChildren().addAll(bg, createDoors());
+        //add treasure
+
+        //add threats
+
+
+        //adds the background, doors, player, treasure and threats to the pane
+        root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(), createTreasureLayer());
+
         return root;
     }
 
@@ -69,9 +76,14 @@ public class RoomDesigner {
     public Pane createTreasureLayer() {
         Pane treasureLayer = new Pane();
         Random rand = new Random();
-        int treasureAmount = rand.nextInt(Settings.THREATS_PER_ROOM + 1);
-        // TODO : insert treasure onto a pane
+        //add treasure
+        int amountInRoom = rand.nextInt(Settings.MAX_TREASURE_PER_ROOM);
 
+        for (int i = 0; i <amountInRoom; i++) {
+            Treasure treasure = new Treasure(i, rand.nextInt((int)Settings.SCENE_WIDTH - 80),
+                    rand.nextInt((int)Settings.SCENE_HEIGHT - 80), rand.nextInt(3));
+            treasureLayer.getChildren().add(treasure.getImage());
+        }
 
         return treasureLayer;
     }

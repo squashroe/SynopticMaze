@@ -121,14 +121,6 @@ public class MazeCreator {
             newRoomPane = roomDesigner.createRoomPane(passage.getFromRoomId());
         }
 
-        //add player
-        newRoomPane.getChildren().add(Settings.getPLAYER().getPlayerImage());
-        //add treasure
-
-        //add threats
-
-        //addAll to the Pane
-
         Settings.GAME_PANE  =  newRoomPane;
         Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, createPlayer());
     }
@@ -168,9 +160,8 @@ public class MazeCreator {
     }
 
 
-    public int setAmountOfTreasure() {
-        //TODO : get amount of treasure per room from config
-        return -1;
+    public void createTreasure() {
+
     }
 
     public int setAmountOfThreats() {
