@@ -7,28 +7,28 @@ import javafx.scene.shape.Shape;
 
 public class Player {
 
-    private double x = 32; // TODO : set a random location in the starting Room
-    private double y = 32;
+    private double x; // TODO : set a random location in the starting Room
+    private double y;
+    private int speed = 7;
     Shape playerImage;
     String playerName = Settings.PLAYER_NAME;
-    private double playerMinX = 16;
-    private double playerMaxX = Settings.SCENE_WIDTH - 48;
-    private double playerMinY = 16;
-    private double playerMaxY = Settings.SCENE_HEIGHT - 48;
+    private double playerMinX = 7;
+    private double playerMaxX = Settings.SCENE_WIDTH -39;
+    private double playerMinY = 7;
+    private double playerMaxY = Settings.SCENE_HEIGHT -39;
     private boolean moveUp = false;
     private boolean moveDown = false;
     private boolean moveLeft = false;
     private boolean moveRight = false;
 
-    public Player() {
+    public Player(double x, double y) {
 
 //        String imageUrl = "file:///C:\\Users\\Joshua Roe\\IdeaProjects\\SynopticMaze\\src\\resources\\player.png";
 //        imageView = new ImageView(new Image(imageUrl));
         playerImage = createPlayerImage();
+        this.x = x;
+        this.y = y;
         playerImage.relocate(x, y);
-
-        // playfieldLayer.getChildren().add(imageView);
-
     }
 
     public Shape createPlayerImage() {
@@ -43,52 +43,61 @@ public class Player {
         moveDown();
         moveLeft();
         moveRight();
+
+        checkBounds();
+
+
     }
 
     public void moveUp() {
         if (moveUp) {
-            y -= 5;
+            y -= speed;
             playerImage.relocate(x, y);
         }
     }
 
     public void moveDown() {
         if (moveDown) {
-            y += 5;
+            y += speed;
             playerImage.relocate(x,y);
         }
     }
 
     public void moveLeft() {
         if (moveLeft) {
-            x -= 5;
+            x -= speed;
             playerImage.relocate( x, y);
         }
     }
 
     public void moveRight() {
         if (moveRight) {
-            x += 5;
+            x += speed;
             playerImage.relocate(x, y);
         }
     }
 
-    private void checkBounds() {
+    public void checkBounds() {
 
+        /*
+        using the number 7 here instead of 0 as my movement is 7.
+        uaing 39 as thats the width of the player + 7 (movement).
+         */
         //not being able to leave the window
         // vertical
-        if (Double.compare(y, playerMaxY) < 0) {
-            y = playerMinY;
-        } else if (Double.compare(y, playerMaxY) > 0) {
-            y = playerMaxY;
+        if(y < 7){
+            y = 7;
         }
-
-        // horizontal
-        if (Double.compare(x, playerMinX) < 0) {
-            x = playerMinX;
-        } else if (Double.compare(x, playerMaxX) > 0) {
-            x = playerMaxX;
+        if(y > Settings.SCENE_HEIGHT - 39){
+            y = Settings.SCENE_HEIGHT -39;
         }
+         //horizontal
+      if(x < 7){
+          x = 7;
+      }
+      if( x > Settings.SCENE_WIDTH - 39){
+          x = Settings.SCENE_HEIGHT - 39;
+      }
 
     }
 
@@ -110,5 +119,13 @@ public class Player {
 
     public void setMoveRight(boolean moveRight) {
         this.moveRight = moveRight;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

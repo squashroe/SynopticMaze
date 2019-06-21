@@ -22,6 +22,8 @@ public class RoomDesigner {
 
 
     public Pane createRoomPane(int roomId){
+        Settings.CURRENT_ROOM_ID = roomId;
+        System.out.println("Current roomId : " + roomId);
         Pane root = new Pane();
         root.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
         Rectangle bg = new Rectangle(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
@@ -31,7 +33,9 @@ public class RoomDesigner {
         if((roomId % 2) != 0){
             bg.setFill(Color.WHITE);
         }
-
+        if(roomId == 9){
+            bg.setFill(Color.RED);
+        }
 
         //TODO: add detail to floor
 

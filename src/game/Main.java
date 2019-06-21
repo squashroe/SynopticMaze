@@ -24,40 +24,30 @@ public class Main extends Application {
     RoomDesigner roomDesigner = new RoomDesigner();
     @Override
     public void start(Stage primaryStage){
-        Group gameRoot = new Group();
+        Settings.GAMEROOT = new Group();
         Group menuRoot = new Group();
         MainMenuController mainMenuController = new MainMenuController();
-        MazeCreator mazeCreator = new MazeCreator();
-
-        //make the game and player field
-        gameRoot.getChildren().addAll(mazeCreator.createStartingRoom(), mazeCreator.createPlayer());
-//
         Scene menuScene = new Scene(menuRoot, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-        Scene gameScene = new Scene(gameRoot, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
 
-        GameInput gameInput = new GameInput(gameScene);
+        //create the game scene
+        MazeCreator mazeCreator = new MazeCreator();
+        mazeCreator.createGameScene();
+
+        //set up listener for input from user on game scene
+        GameInput gameInput = new GameInput(Settings.GAMESCENE);
         gameInput.addListeners();
 
-        primaryStage.setScene(gameScene);
+
+        //put the scene on the stage
+        primaryStage.setScene(Settings.GAMESCENE);
         primaryStage.setOnCloseRequest(event -> {
             bgThread.shutdownNow();
         });
-        //MenuInputListener menuInputListener = new MenuInputListener(menuScene);
-//        menuInputListener.addListener();
+
+        MazeCreator.runAnimation();
+
+        //display the stage to the window
         primaryStage.show();
-
-        AnimationTimer gameLoop = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-
-                //player Input
-                Settings.getPLAYER().move();
-
-            }
-        };
-        gameLoop.start();
-
-//
     }
 
 

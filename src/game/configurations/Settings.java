@@ -4,6 +4,9 @@ import game.player.Player;
 import game.rooms.Door;
 import game.rooms.Passage;
 import game.rooms.Room;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -13,15 +16,21 @@ import java.util.HashSet;
 public class Settings {
 
     //TODO : make all fields private
-    private static Player PLAYER = new Player();
+
+    public static double PLAYERXLOCATION = 32;
+    public static double PLAYERYLOCATION = 32;
+    private static Player PLAYER = new Player(PLAYERXLOCATION,PLAYERYLOCATION);
     public static final String PLAYER_NAME = "Read From File";
+
+
     //TODO: change the font to something really cool
     public static Font FONT = Font.font("", FontWeight.BOLD, 18);
 
     public static double SCENE_WIDTH = 640;
     public static double SCENE_HEIGHT = 640;
-
-    public static short TILE_SIZE = 32;
+    public static Group GAMEROOT;
+    public static Scene GAMESCENE;
+    public static Pane GAME_PANE;
 
     public static int TREASURE_PER_ROOM = 3;
     public static int THREATS_PER_ROOM = 3;
@@ -32,6 +41,9 @@ public class Settings {
     public static boolean ESCPRESSED;
 
     public static HashMap<Integer, Room> ROOM_LIST = createAllRooms();
+    public static int CURRENT_ROOM_ID = 0;
+    public static int CHANGE_ROOM_COUNTER = 0;
+
     public static HashMap<Integer, Passage> PASSAGE_LIST = createAllPassages();
 
     public static Player getPLAYER() {
@@ -46,7 +58,7 @@ public class Settings {
          * 4 5 6
          * 7 8 9
          */
-        Room room1 = roomCreator(1, false, null, true, 2,
+        Room room1 = roomCreator(1, false, 99, true, 2,
                 true, 6, true, 5);
         Room room2 = roomCreator(2, true, 1, true, 3,
                 true, 7, true, 2);
@@ -55,15 +67,15 @@ public class Settings {
         Room room4 = roomCreator(4, true, 6, true, 9,
                 true, 12, true, 1);
         Room room5 = roomCreator(5, true, 7, true, 10,
-                false, null, true, 11);
+                false, 99, true, 11);
         Room room6 = roomCreator(6, true, 8, true, 11,
-                false, null, true, 10);
+                false, 99, true, 10);
         Room room7 = roomCreator(7, true, 12, true, 13,
-                true, 5, false, null);
+                true, 5, false, 99);
         Room room8 = roomCreator(8, true, 9, true, 14,
-                false, null, true, 13);
-        Room room9 = roomCreator(9, false, null, false, null,
-                false, null, true, 14);
+                false, 99, true, 13);
+        Room room9 = roomCreator(9, false, 99, false, 99,
+                false, 99, true, 14);
 
         tempRoomList.put(1, room1);
         tempRoomList.put(2, room2);
@@ -95,6 +107,8 @@ public class Settings {
         Passage passage13 = new Passage(13, 7, 1, 8, 3);
         Passage passage14 = new Passage(14, 8, 1, 9, 3);
 
+        Passage passage99 = new Passage(99, 99,99,99,99);
+
         tempPassageList.put(1, passage1);
         tempPassageList.put(2, passage2);
         tempPassageList.put(3, passage3);
@@ -109,6 +123,7 @@ public class Settings {
         tempPassageList.put(12, passage12);
         tempPassageList.put(13, passage13);
         tempPassageList.put(14, passage14);
+        tempPassageList.put(99, passage99);
 
         return tempPassageList;
     }
