@@ -2,7 +2,6 @@ package game.player;
 
 import game.configurations.Settings;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
@@ -43,8 +42,56 @@ public class Player {
 
         checkBounds();
 
-
     }
+    public void checkIfICanSpawnInRoom(){
+        if (Settings.CHANGE_ROOM_COUNTER == 1) {
+
+        }
+    }
+
+    public void spawnInRoom(int newDoorToSpawnAt) {
+            switch (newDoorToSpawnAt) {
+                case (0):
+                    System.out.println("moved to north door");
+                    setX(Settings.SCENE_WIDTH / 2);
+                    setY(50);
+                    break;
+                case (1):
+                    setX(Settings.SCENE_WIDTH - 50);
+                    setY(Settings.SCENE_HEIGHT/2);
+                    System.out.println("moved to east door");
+                    break;
+                case (2):
+                    setX(Settings.SCENE_WIDTH /2);
+                    setY(Settings.SCENE_HEIGHT - 50);
+                    System.out.println("moved to south door");
+                    break;
+                case (3):
+                    setX(50);
+                    setY(Settings.SCENE_HEIGHT /2);
+                    System.out.println("moved to west door");
+                    break;
+            }
+//
+//            switch (newDoorToSpawnAt) {
+//                case (0):
+//                    System.out.println("moved to north door");
+//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH / 2, 70);
+//                    break;
+//                case (1):
+//                    System.out.println("moved to east door");
+//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH - 70, Settings.SCENE_HEIGHT / 2);
+//                    break;
+//                case (2):
+//                    System.out.println("moved to south door");
+//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH / 2, Settings.SCENE_HEIGHT - 70);
+//                    break;
+//                case (3):
+//                    System.out.println("moved to west door");
+//                    Settings.getPLAYER().getPlayerImage().relocate(70, Settings.SCENE_HEIGHT / 2);
+//                    break;
+//            }
+        }
 
     public void moveUp() {
         if (moveUp) {
@@ -56,14 +103,14 @@ public class Player {
     public void moveDown() {
         if (moveDown) {
             y += speed;
-            playerImage.relocate(x,y);
+            playerImage.relocate(x, y);
         }
     }
 
     public void moveLeft() {
         if (moveLeft) {
             x -= speed;
-            playerImage.relocate( x, y);
+            playerImage.relocate(x, y);
         }
     }
 
@@ -82,19 +129,19 @@ public class Player {
          */
         //not being able to leave the window
         // vertical
-        if(y < 7){
+        if (y < 7) {
             y = 7;
         }
-        if(y > Settings.SCENE_HEIGHT - 39){
-            y = Settings.SCENE_HEIGHT -39;
+        if (y > Settings.SCENE_HEIGHT - 39) {
+            y = Settings.SCENE_HEIGHT - 39;
         }
-         //horizontal
-      if(x < 7){
-          x = 7;
-      }
-      if( x > Settings.SCENE_WIDTH - 39){
-          x = Settings.SCENE_HEIGHT - 39;
-      }
+        //horizontal
+        if (x < 7) {
+            x = 7;
+        }
+        if (x > Settings.SCENE_WIDTH - 39) {
+            x = Settings.SCENE_HEIGHT - 39;
+        }
 
     }
 
@@ -124,5 +171,13 @@ public class Player {
 
     public double getY() {
         return y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 }

@@ -19,7 +19,7 @@ public class Settings {
 
     public static double PLAYERXLOCATION = 32;
     public static double PLAYERYLOCATION = 32;
-    private static Player PLAYER = new Player(PLAYERXLOCATION,PLAYERYLOCATION);
+    private static Player PLAYER = new Player(PLAYERXLOCATION, PLAYERYLOCATION);
     public static final String PLAYER_NAME = "Read From File";
 
 
@@ -50,6 +50,7 @@ public class Settings {
     public static Player getPLAYER() {
         return PLAYER;
     }
+
     public static int TOTAL_WEALTH;
 
     public static HashMap<Integer, Room> createAllRooms() {
@@ -65,7 +66,7 @@ public class Settings {
         Room room2 = roomCreator(2, true, 1, true, 3,
                 true, 7, true, 2);
         Room room3 = roomCreator(3, true, 4, true, 4,
-                true, 8 , true, 3);
+                true, 8, true, 3);
         Room room4 = roomCreator(4, true, 6, true, 9,
                 true, 12, true, 1);
         Room room5 = roomCreator(5, true, 7, true, 10,
@@ -94,22 +95,22 @@ public class Settings {
 
     private static HashMap<Integer, Passage> createAllPassages() {
         HashMap<Integer, Passage> tempPassageList = new HashMap<>();
-        Passage passage1 =  new Passage(1, 2, 0, 4, 3);
-        Passage passage2 =  new Passage(2, 2, 3, 1, 1);
-        Passage passage3 =  new Passage(3, 2, 1, 3, 3);
-        Passage passage4 =  new Passage(4, 3, 1,3, 0);
-        Passage passage5 =  new Passage(5, 1, 3, 7, 2);
-        Passage passage6 =  new Passage(6, 1, 2, 4, 0);
-        Passage passage7 =  new Passage(7, 2, 2,5, 0);
-        Passage passage8 =  new Passage(8, 3, 2, 6,0);
-        Passage passage9 =  new Passage(9, 4, 1, 8, 0);
+        Passage passage1 = new Passage(1, 2, 0, 4, 3);
+        Passage passage2 = new Passage(2, 2, 3, 1, 1);
+        Passage passage3 = new Passage(3, 2, 1, 3, 3);
+        Passage passage4 = new Passage(4, 3, 1, 3, 0);
+        Passage passage5 = new Passage(5, 1, 3, 7, 2);
+        Passage passage6 = new Passage(6, 1, 2, 4, 0);
+        Passage passage7 = new Passage(7, 2, 2, 5, 0);
+        Passage passage8 = new Passage(8, 3, 2, 6, 0);
+        Passage passage9 = new Passage(9, 4, 1, 8, 0);
         Passage passage10 = new Passage(10, 5, 1, 6, 3);
         Passage passage11 = new Passage(11, 5, 3, 6, 1);
         Passage passage12 = new Passage(12, 4, 2, 7, 0);
         Passage passage13 = new Passage(13, 7, 1, 8, 3);
         Passage passage14 = new Passage(14, 8, 1, 9, 3);
 
-        Passage passage99 = new Passage(99, 99,99,99,99);
+        Passage passage99 = new Passage(99, 99, 99, 99, 99);
 
         tempPassageList.put(1, passage1);
         tempPassageList.put(2, passage2);
@@ -131,12 +132,12 @@ public class Settings {
     }
 
     private static Room roomCreator(int roomId, boolean door1Active, Integer door1PassageId,
-                            boolean door2Active, Integer door2PassageId,
-                            boolean door3Active, Integer door3PassageId,
-                            boolean door4Active, Integer door4PassageId) {
+                                    boolean door2Active, Integer door2PassageId,
+                                    boolean door3Active, Integer door3PassageId,
+                                    boolean door4Active, Integer door4PassageId) {
 
 
-        return new Room(roomId,  new Door(0, roomId, door1Active, door1PassageId),
+        return new Room(roomId, new Door(0, roomId, door1Active, door1PassageId),
                 new Door(1, roomId, door2Active, door2PassageId),
                 new Door(2, roomId, door3Active, door3PassageId),
                 new Door(3, roomId, door4Active, door4PassageId));

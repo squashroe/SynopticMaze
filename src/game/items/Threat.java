@@ -5,7 +5,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-public class Threat extends Item{
+public class Threat extends Item {
 
     private int type;
 
@@ -20,16 +20,16 @@ public class Threat extends Item{
     }
 
     private void createTypeOfThreat(int type) {
-            switch(type) {
-                case 0 :
-                    createOrkThreat();
-                    break;
-                case 1 :
-                    createBombThreat();
-                    break;
-                case 2 :
-                    createBatThreat();
-            }
+        switch (type) {
+            case 0:
+                createOrkThreat();
+                break;
+            case 1:
+                createBombThreat();
+                break;
+            case 2:
+                createBatThreat();
+        }
     }
 
     private void createOrkThreat() {
@@ -47,6 +47,7 @@ public class Threat extends Item{
         setImage(bombShape);
         setName("Bomb");
     }
+
     private void createBatThreat() {
         Rectangle batShape = new Rectangle(40, 15, Color.DARKGRAY);
         batShape.setStroke(Color.GREY);
@@ -58,7 +59,6 @@ public class Threat extends Item{
     public Threat(int id, String name, double x, double y) {
         super(id, name, x, y);
     }
-
 
 
     @Override

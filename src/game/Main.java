@@ -4,15 +4,10 @@ import game.configurations.Settings;
 import game.engine.GameInput;
 import game.engine.MazeCreator;
 import game.menus.MainMenuController;
-import game.player.Player;
-import game.rooms.Room;
 import game.rooms.RoomDesigner;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.concurrent.Executors;
@@ -22,8 +17,9 @@ public class Main extends Application {
 
     private ScheduledExecutorService bgThread = Executors.newSingleThreadScheduledExecutor();
     RoomDesigner roomDesigner = new RoomDesigner();
+
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         Settings.GAMEROOT = new Group();
         Group menuRoot = new Group();
         MainMenuController mainMenuController = new MainMenuController();

@@ -21,17 +21,18 @@ public class Treasure extends Item {
 
 
     public void createTypeOfCoin(int type) {
-        switch(type) {
-            case 0 :
+        switch (type) {
+            case 0:
                 createCopperTreasure();
                 break;
-            case 1 :
+            case 1:
                 createSilverTreasure();
                 break;
-            case 2 :
+            case 2:
                 createGoldTreasure();
         }
     }
+
     public void createGoldTreasure() {
         Circle circle = new Circle(20, Color.GOLD);
         circle.setStroke(Color.BLACK);

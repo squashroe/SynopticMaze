@@ -1,23 +1,20 @@
 package game.engine;
 
 import game.configurations.Settings;
-import game.player.Player;
 import game.rooms.Door;
 import game.rooms.Passage;
 import game.rooms.Room;
 import game.rooms.RoomDesigner;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 import java.util.Random;
 
-import static game.configurations.Settings.GAME_PANE;
-
 public class MazeCreator {
 
     static boolean changeDoorTrigger = false;
+    static boolean checkDoor = true;
 
     public MazeCreator() {
     }
@@ -29,7 +26,7 @@ public class MazeCreator {
     public void createGameScene() {
         //make the game and player field
         Settings.GAME_PANE = createStartingRoom();
-        Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, createPlayer());
+        Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
 
         //create the Scene with the game related stuff
         Settings.GAMESCENE = new Scene(Settings.GAMEROOT, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
@@ -46,14 +43,6 @@ public class MazeCreator {
 
     }
 
-
-    public static Pane createPlayer() {
-        Pane playFieldLayer = new Pane();
-        Player player = Settings.getPLAYER();
-        playFieldLayer.getChildren().add(player.getPlayerImage());
-        return playFieldLayer;
-    }
-
     /**
      * Animates the Screen
      */
@@ -64,29 +53,31 @@ public class MazeCreator {
                 //player Input
                 Settings.getPLAYER().move();
                 isPlayerCollidingWithDoor();
+               // System.out.println("playerX: " + Settings.getPLAYER().getX());
+
             }
         };
         gameLoop.start();
     }
 
     /**
-     *checks if the player is going through any of the doors
+     * checks if the player is going through any of the doors
      */
     public static void isPlayerCollidingWithDoor() {
         boolean collideNorthDoor = comparePlayerCoordinates((Settings.SCENE_WIDTH / 2), 0.0);
         boolean collideEastDoor = comparePlayerCoordinates(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT / 2);
         boolean collideSouthDoor = comparePlayerCoordinates(Settings.SCENE_WIDTH / 2, Settings.SCENE_HEIGHT);
         boolean collideWestDoor = comparePlayerCoordinates(0.0, Settings.SCENE_HEIGHT / 2);
-        if (collideNorthDoor|| collideEastDoor || collideSouthDoor || collideWestDoor ){
+        if (collideNorthDoor || collideEastDoor || collideSouthDoor || collideWestDoor) {
+            checkDoor = true; // this makes the check door stop giving a null pointer when it runs again after f=moving the player
             changeDoorTrigger = true;
             Settings.CHANGE_ROOM_COUNTER++;
         }
 
-        if(Settings.CHANGE_ROOM_COUNTER == 1){
+        if (Settings.CHANGE_ROOM_COUNTER == 1 && checkDoor) {
             changePaneThroughPassage();
-            System.out.println("hello");
         }
-        if(!changeDoorTrigger){
+        if (!changeDoorTrigger) {
             Settings.CHANGE_ROOM_COUNTER = 0;
         }
         changeDoorTrigger = false;
@@ -95,34 +86,46 @@ public class MazeCreator {
 
     /**
      * changes the Pane so that the room changes
+     *
      * @return
      */
     public static void changePaneThroughPassage() {
 
-        Door door = getDoorFromRoom();
+       Door door = getDoorFromRoom();
 
         Passage passage = Settings.PASSAGE_LIST.get(door.getPassageId());
 
-        if (passage.getId() == 99){
+        if (passage.getId() == 99) {
+            //TODO : print message to screen
             System.out.println("You cannot go this way.");
         }
         //Room I am currently in
         int currentRoomId = door.getParentRoomId();
 
+        int newDoorToSpawnAt = 0;
+        boolean changedRoom = false;
         RoomDesigner roomDesigner = new RoomDesigner();
-        Pane newRoomPane = roomDesigner.createRoomPane(currentRoomId);
 
         //if the room i am in is the same as the "room from" in passage, go to "room to" in passage
         if (currentRoomId == passage.getFromRoomId()) {
-            newRoomPane = roomDesigner.createRoomPane(passage.getToRoomId());
+            changedRoom = true;
+            newDoorToSpawnAt = passage.getToDoorId();
+            Settings.getPLAYER().spawnInRoom(newDoorToSpawnAt);
+            Settings.GAME_PANE = roomDesigner.createRoomPane(passage.getToRoomId());
         }
         //if the room i am in is the "room to" in passage, then go to "room from" in passage
         if (currentRoomId == passage.getToRoomId()) {
-            newRoomPane = roomDesigner.createRoomPane(passage.getFromRoomId());
+            changedRoom = true;
+            newDoorToSpawnAt = passage.getFromDoorId();
+            Settings.getPLAYER().setX(0);
+            Settings.getPLAYER().spawnInRoom(newDoorToSpawnAt);
+            Settings.GAME_PANE = roomDesigner.createRoomPane(passage.getFromRoomId());
         }
 
-        Settings.GAME_PANE  =  newRoomPane;
-        Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, createPlayer());
+        if (changedRoom) {
+            Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE);
+        }
+        checkDoor = false;
     }
 
     public static Door getDoorFromRoom() {
@@ -149,7 +152,7 @@ public class MazeCreator {
     private static boolean comparePlayerCoordinates(Double mapX, Double mapY) {
         boolean collidedWithDoor = false;
         boolean collideWithDoorX = (Settings.getPLAYER().getX() >= mapX - 40) && (Settings.getPLAYER().getX() <= mapX + 40);
-        boolean collideWithDoorY = (Settings.getPLAYER().getY() >= mapY -40) && (Settings.getPLAYER().getY() <= mapY + 40);
+        boolean collideWithDoorY = (Settings.getPLAYER().getY() >= mapY - 40) && (Settings.getPLAYER().getY() <= mapY + 40);
 
         //System.out.println("PX" +Settings.getPLAYER().getX()+ "MX" +mapX + collideWithDoorX);
         if (collideWithDoorX && collideWithDoorY) {
