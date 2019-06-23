@@ -7,6 +7,9 @@ import javafx.scene.shape.Shape;
 public class Treasure extends Item {
 
     private int value;
+    private int radius;
+    private boolean pickedUp;
+
 
     public Treasure() {
         super();
@@ -34,7 +37,8 @@ public class Treasure extends Item {
     }
 
     public void createGoldTreasure() {
-        Circle circle = new Circle(20, Color.GOLD);
+        radius = 18;
+        Circle circle = new Circle(radius, Color.GOLD);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(1.0);
         setImage(circle);
@@ -43,7 +47,8 @@ public class Treasure extends Item {
     }
 
     public void createSilverTreasure() {
-        Circle circle = new Circle(15, Color.SILVER);
+        radius = 12;
+        Circle circle = new Circle(radius, Color.SILVER);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(1.0);
         setImage(circle);
@@ -52,7 +57,8 @@ public class Treasure extends Item {
     }
 
     public void createCopperTreasure() {
-        Circle circle = new Circle(10, Color.ROSYBROWN);
+        radius = 6;
+        Circle circle = new Circle(radius, Color.ROSYBROWN);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(1.0);
         setImage(circle);
@@ -97,4 +103,14 @@ public class Treasure extends Item {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void dropItem() {
+
+    }
+
+
 }

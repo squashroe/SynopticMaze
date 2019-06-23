@@ -9,12 +9,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RoomDesigner {
 
     private Canvas canvas = new Canvas(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
     private GraphicsContext gc;
+    private boolean thisRoomVisited;
 
     public RoomDesigner() {
         gc = canvas.getGraphicsContext2D();
@@ -35,19 +38,25 @@ public class RoomDesigner {
         }
         if (roomId == 9) {
             bg.setFill(Color.RED);
+            root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage());
+            // say well done you completed hte game
+            return root;
         }
-
+        //System.out.println("room: "+roomId+"visited = "+Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).isVisited());
         //TODO: add detail to floor
 
         //add treasure
-
+        Pane treasureLayer = createTreasureLayer(roomId);
         //add threats
+        Pane threatLayer = createThreatLayer();
 
+        //check if I've visited a room
+        Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).setVisited(true);
 
         //adds the background, doors, player, treasure and threats to the pane
         root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(),
-                createTreasureLayer(), createThreatLayer());
-
+                treasureLayer, threatLayer);
+        Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).setVisited(true);
         return root;
     }
 
@@ -72,18 +81,26 @@ public class RoomDesigner {
         return doorLayer;
     }
 
-    public Pane createTreasureLayer() {
+    public Pane createTreasureLayer(int roomId) {
         Pane treasureLayer = new Pane();
+
+        // if i have visited the room before, save the coins that had spawned originally
+        if(Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).isVisited()){
+            return Settings.roomTreasurePaneList.get(roomId);
+        }
+
         Random rand = new Random();
         //add treasure
         int amountInRoom = rand.nextInt(Settings.MAX_TREASURE_PER_ROOM);
-
+        List<Treasure> treasuresInRoom = new ArrayList<>();
         for (int i = 0; i < amountInRoom; i++) {
             Treasure treasure = new Treasure(i, rand.nextInt((int) Settings.SCENE_WIDTH - 80),
                     rand.nextInt((int) Settings.SCENE_HEIGHT - 80), rand.nextInt(3));
+            treasuresInRoom.add(treasure);
             treasureLayer.getChildren().add(treasure.getImage());
         }
-
+        Settings.treasuresInCurrentRoom = treasuresInRoom;
+        Settings.roomTreasurePaneList.put(roomId, treasureLayer);
         return treasureLayer;
     }
 

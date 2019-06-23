@@ -7,6 +7,7 @@ public class Passage {
     private int fromDoorId;
     private int toRoomId;
     private int toDoorId;
+    private boolean isExit = false;
 
     public Passage(int id, int fromRoomId, int fromDoorId, int toRoomId, int toDoorId) {
         this.id = id;
@@ -54,6 +55,14 @@ public class Passage {
 
     public void setToDoorId(int toDoorId) {
         this.toDoorId = toDoorId;
+    }
+
+    public boolean isExit() {
+        return isExit;
+    }
+
+    public void setExit(boolean exit) {
+        isExit = exit;
     }
 }
 

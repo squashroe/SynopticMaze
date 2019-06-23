@@ -1,6 +1,7 @@
 package game.player;
 
 import game.configurations.Settings;
+import game.items.Treasure;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -16,6 +17,7 @@ public class Player {
     private boolean moveDown = false;
     private boolean moveLeft = false;
     private boolean moveRight = false;
+    private int imageSize = 32;
 
     public Player(double x, double y) {
 
@@ -28,7 +30,7 @@ public class Player {
     }
 
     public Shape createPlayerImage() {
-        Rectangle rect = new Rectangle(32, 32);
+        Rectangle rect = new Rectangle(imageSize, imageSize);
         rect.setFill(Color.GREEN);
         this.playerImage = rect;
         return playerImage;
@@ -43,55 +45,37 @@ public class Player {
         checkBounds();
 
     }
-    public void checkIfICanSpawnInRoom(){
+
+    public void checkIfICanSpawnInRoom() {
         if (Settings.CHANGE_ROOM_COUNTER == 1) {
 
         }
     }
 
     public void spawnInRoom(int newDoorToSpawnAt) {
-            switch (newDoorToSpawnAt) {
-                case (0):
-                    System.out.println("moved to north door");
-                    setX(Settings.SCENE_WIDTH / 2);
-                    setY(50);
-                    break;
-                case (1):
-                    setX(Settings.SCENE_WIDTH - 50);
-                    setY(Settings.SCENE_HEIGHT/2);
-                    System.out.println("moved to east door");
-                    break;
-                case (2):
-                    setX(Settings.SCENE_WIDTH /2);
-                    setY(Settings.SCENE_HEIGHT - 50);
-                    System.out.println("moved to south door");
-                    break;
-                case (3):
-                    setX(50);
-                    setY(Settings.SCENE_HEIGHT /2);
-                    System.out.println("moved to west door");
-                    break;
-            }
-//
-//            switch (newDoorToSpawnAt) {
-//                case (0):
-//                    System.out.println("moved to north door");
-//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH / 2, 70);
-//                    break;
-//                case (1):
-//                    System.out.println("moved to east door");
-//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH - 70, Settings.SCENE_HEIGHT / 2);
-//                    break;
-//                case (2):
-//                    System.out.println("moved to south door");
-//                    Settings.getPLAYER().getPlayerImage().relocate(Settings.SCENE_WIDTH / 2, Settings.SCENE_HEIGHT - 70);
-//                    break;
-//                case (3):
-//                    System.out.println("moved to west door");
-//                    Settings.getPLAYER().getPlayerImage().relocate(70, Settings.SCENE_HEIGHT / 2);
-//                    break;
-//            }
+        switch (newDoorToSpawnAt) {
+            case (0):
+                System.out.println("moved to north door");
+                setX(Settings.SCENE_WIDTH / 2);
+                setY(50);
+                break;
+            case (1):
+                setX(Settings.SCENE_WIDTH - 50);
+                setY(Settings.SCENE_HEIGHT / 2);
+                System.out.println("moved to east door");
+                break;
+            case (2):
+                setX(Settings.SCENE_WIDTH / 2);
+                setY(Settings.SCENE_HEIGHT - 50);
+                System.out.println("moved to south door");
+                break;
+            case (3):
+                setX(50);
+                setY(Settings.SCENE_HEIGHT / 2);
+                System.out.println("moved to west door");
+                break;
         }
+    }
 
     public void moveUp() {
         if (moveUp) {
@@ -180,4 +164,14 @@ public class Player {
     public void setY(double y) {
         this.y = y;
     }
+
+    public boolean collidesWith(Treasure treasure) {
+        return (treasure.getX() + treasure.getRadius() >= x && treasure.getY() + treasure.getRadius() >= y &&
+                treasure.getX() <= x + 40 && treasure.getY() <= y + 40);
+    }
+
+    public void collectTreasure(Treasure treasure) {
+            Settings.TOTAL_WEALTH += treasure.getValue();
+    }
+
 }

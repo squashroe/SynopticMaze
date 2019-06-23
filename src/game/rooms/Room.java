@@ -14,6 +14,7 @@ public class Room {
     private int numberOfThreats;
     private int numberOfTreasures;
     private boolean doorsLocked;
+    private boolean visited;
 
     public Room(int id, Door doorNorth, Door doorEast, Door doorSouth, Door doorWest) {
         this.id = id;
@@ -21,6 +22,7 @@ public class Room {
         this.doorEast = doorEast;
         this.doorSouth = doorSouth;
         this.doorWest = doorWest;
+        visited = false;
     }
 
     public int getId() {
@@ -97,6 +99,14 @@ public class Room {
 
     public boolean isDoorsLocked() {
         return doorsLocked;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 
     public ArrayList<Door> getAllDoors() {

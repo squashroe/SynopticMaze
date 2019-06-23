@@ -1,6 +1,7 @@
 package game.engine;
 
 import game.configurations.Settings;
+import game.items.Treasure;
 import game.rooms.Door;
 import game.rooms.Passage;
 import game.rooms.Room;
@@ -8,13 +9,22 @@ import game.rooms.RoomDesigner;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MazeCreator {
 
     static boolean changeDoorTrigger = false;
     static boolean checkDoor = true;
+    private static boolean doorsUnlocked = true; // true for now, but needs to start false so that dealing with all threats means something
+    private static boolean changedRoom;
 
     public MazeCreator() {
     }
@@ -53,11 +63,36 @@ public class MazeCreator {
                 //player Input
                 Settings.getPLAYER().move();
                 isPlayerCollidingWithDoor();
-               // System.out.println("playerX: " + Settings.getPLAYER().getX());
+                // System.out.println("playerX: " + Settings.getPLAYER().getX());
+                collisionsWithTreasure();
+                //  collisionsWithThreats();
 
             }
         };
         gameLoop.start();
+    }
+
+    private static void collisionsWithTreasure() {
+        List<Treasure> toRemove = new ArrayList();
+        for (Treasure treasure : Settings.treasuresInCurrentRoom) {
+            if (Settings.getPLAYER().collidesWith(treasure)) {
+                boolean collectedTreasure = false;
+                Settings.getPLAYER().collectTreasure(treasure);
+                treasure.getImage().relocate(9999, 9999);//cheap way to get rid of treasure
+
+                    toRemove.add(treasure);
+
+                System.out.println(Settings.TOTAL_WEALTH);
+                //Settings.treasuresInCurrentRoom.remove(treasure.getId());
+                //remove treasure in settings lst with the id
+
+//                Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
+//
+//                //create the Scene with the game related stuff
+//                Settings.GAMESCENE = new Scene(Settings.GAMEROOT, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+            }
+        }
+        Settings.treasuresInCurrentRoom.removeAll(toRemove);
     }
 
     /**
@@ -74,7 +109,7 @@ public class MazeCreator {
             Settings.CHANGE_ROOM_COUNTER++;
         }
 
-        if (Settings.CHANGE_ROOM_COUNTER == 1 && checkDoor) {
+        if (Settings.CHANGE_ROOM_COUNTER == 1 && checkDoor && doorsUnlocked) {
             changePaneThroughPassage();
         }
         if (!changeDoorTrigger) {
@@ -91,7 +126,7 @@ public class MazeCreator {
      */
     public static void changePaneThroughPassage() {
 
-       Door door = getDoorFromRoom();
+        Door door = getDoorFromRoom();
 
         Passage passage = Settings.PASSAGE_LIST.get(door.getPassageId());
 
@@ -103,7 +138,7 @@ public class MazeCreator {
         int currentRoomId = door.getParentRoomId();
 
         int newDoorToSpawnAt = 0;
-        boolean changedRoom = false;
+        changedRoom = false;
         RoomDesigner roomDesigner = new RoomDesigner();
 
         //if the room i am in is the same as the "room from" in passage, go to "room to" in passage
@@ -117,16 +152,24 @@ public class MazeCreator {
         if (currentRoomId == passage.getToRoomId()) {
             changedRoom = true;
             newDoorToSpawnAt = passage.getFromDoorId();
-            Settings.getPLAYER().setX(0);
             Settings.getPLAYER().spawnInRoom(newDoorToSpawnAt);
             Settings.GAME_PANE = roomDesigner.createRoomPane(passage.getFromRoomId());
         }
+
+        //
+        if (passage.isExit()){
+
+
+            Settings.GAME_PANE.getChildren().add();
+        }
+
 
         if (changedRoom) {
             Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE);
         }
         checkDoor = false;
     }
+
 
     public static Door getDoorFromRoom() {
         //detect which room / door I am at
@@ -172,9 +215,18 @@ public class MazeCreator {
         return -1;
     }
 
-//    public void onCompleteGame() {
-//        if(isExit == true)
-//    }
+    public static void createCompleteGamePane (Pane completeGamePane) {
+        Text completeGameMessage = new Text();
+        completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 64));
+        completeGameMessage.setStroke(Color.BLACK);
+        completeGameMessage.setFill(Color.YELLOW);
+
+        completeGameMessage.relocate(100, 100);
+        completeGameMessage.setText("GAME WINNER");
+        completeGameMessage.setBoundsType(TextBoundsType.VISUAL);
+
+        completeGamePane.getChildren().add(completeGameMessage);
+    }
 
 
 }

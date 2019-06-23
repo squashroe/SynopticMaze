@@ -1,5 +1,7 @@
 package game.configurations;
 
+import game.items.Threat;
+import game.items.Treasure;
 import game.player.Player;
 import game.rooms.Door;
 import game.rooms.Passage;
@@ -10,8 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class Settings {
 
@@ -31,10 +35,15 @@ public class Settings {
     public static Group GAMEROOT;
     public static Scene GAMESCENE;
     public static Pane GAME_PANE;
+    public static boolean GAME_COMPLETE = false;
 
 
     public static int MAX_TREASURE_PER_ROOM = 5;
+    public static List<Treasure> treasuresInCurrentRoom = new ArrayList<>();
+    public static HashMap<Integer, Pane> roomTreasurePaneList = new HashMap<>();
+
     public static int MAX_THREATS_PER_ROOM = 5;
+    public List<Threat> threatsInCurrentRoom = new ArrayList<>();
 
     public static int MAZE_ROOM_WIDTH = 3;
     public static int MAZE_ROOM_HEIGHT = 3;
@@ -109,6 +118,7 @@ public class Settings {
         Passage passage12 = new Passage(12, 4, 2, 7, 0);
         Passage passage13 = new Passage(13, 7, 1, 8, 3);
         Passage passage14 = new Passage(14, 8, 1, 9, 3);
+        passage14.setExit(true);
 
         Passage passage99 = new Passage(99, 99, 99, 99, 99);
 

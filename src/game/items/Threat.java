@@ -8,6 +8,7 @@ import javafx.scene.shape.Shape;
 public class Threat extends Item {
 
     private int type;
+    private boolean dealtWith;
 
     public Threat() {
         super();
