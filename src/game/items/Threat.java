@@ -8,7 +8,7 @@ import javafx.scene.shape.Shape;
 public class Threat extends Item {
 
     private int type;
-    private boolean dealtWith;
+    private boolean defeated;
 
     public Threat() {
         super();
@@ -110,5 +110,23 @@ public class Threat extends Item {
     @Override
     public void setY(double y) {
         super.setY(y);
+    }
+
+    @Override
+    public int getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public boolean isDefeated() {
+        return defeated;
+    }
+
+    public void setDefeated(boolean defeated) {
+        this.defeated = defeated;
     }
 }

@@ -157,10 +157,9 @@ public class MazeCreator {
         }
 
         //
-        if (passage.isExit()){
-
-
-            Settings.GAME_PANE.getChildren().add();
+        if (passage.isExit() || Settings.GAME_COMPLETE){
+            Settings.GAME_COMPLETE = true;
+            Settings.GAME_PANE.getChildren().add(createCompleteGamePane());
         }
 
 
@@ -215,18 +214,35 @@ public class MazeCreator {
         return -1;
     }
 
-    public static void createCompleteGamePane (Pane completeGamePane) {
+    public static Pane createCompleteGamePane () {
+        Pane completeGamePane = new Pane();
         Text completeGameMessage = new Text();
         completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 64));
         completeGameMessage.setStroke(Color.BLACK);
         completeGameMessage.setFill(Color.YELLOW);
-
         completeGameMessage.relocate(100, 100);
         completeGameMessage.setText("GAME WINNER");
         completeGameMessage.setBoundsType(TextBoundsType.VISUAL);
+        //add in score
+        Text scoreMessage = new Text();
+        scoreMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
+        scoreMessage.setStroke(Color.BLACK);
+        scoreMessage.setFill(Color.BLACK);
+        scoreMessage.relocate(100, 300);
+        scoreMessage.setText("Total Wealth: "+ Settings.TOTAL_WEALTH);
+        scoreMessage.setBoundsType(TextBoundsType.VISUAL);
 
-        completeGamePane.getChildren().add(completeGameMessage);
+        //add in instructions to quit and start again?!
+        Text returnToMenuMessage =new Text();
+        returnToMenuMessage.setFont(Settings.FONT);
+        returnToMenuMessage.setStroke(Color.BLACK);
+        returnToMenuMessage.setFill(Color.BLACK);
+        returnToMenuMessage.relocate(100, 500);
+        returnToMenuMessage.setText("Return to menu to create new maze");
+        returnToMenuMessage.setBoundsType(TextBoundsType.VISUAL);
+
+        completeGamePane.getChildren().addAll(completeGameMessage, scoreMessage, returnToMenuMessage);
+        return completeGamePane;
     }
-
 
 }

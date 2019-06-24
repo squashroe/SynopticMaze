@@ -94,8 +94,8 @@ public class RoomDesigner {
         int amountInRoom = rand.nextInt(Settings.MAX_TREASURE_PER_ROOM);
         List<Treasure> treasuresInRoom = new ArrayList<>();
         for (int i = 0; i < amountInRoom; i++) {
-            Treasure treasure = new Treasure(i, rand.nextInt((int) Settings.SCENE_WIDTH - 80),
-                    rand.nextInt((int) Settings.SCENE_HEIGHT - 80), rand.nextInt(3));
+            Treasure treasure = new Treasure(i, (rand.nextInt((int) Settings.SCENE_WIDTH - 120)) +80,
+                    (rand.nextInt((int) Settings.SCENE_HEIGHT - 120))+ 80, rand.nextInt(3));
             treasuresInRoom.add(treasure);
             treasureLayer.getChildren().add(treasure.getImage());
         }

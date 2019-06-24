@@ -171,7 +171,9 @@ public class Player {
     }
 
     public void collectTreasure(Treasure treasure) {
+        if(!Settings.GAME_COMPLETE) {
             Settings.TOTAL_WEALTH += treasure.getValue();
+        }
     }
 
 }
