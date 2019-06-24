@@ -1,5 +1,6 @@
 package game;
 
+import game.configurations.ConfigTranslator;
 import game.configurations.Settings;
 import game.engine.MazeCreator;
 import game.menus.MainMenuController;
@@ -25,6 +26,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        ConfigTranslator.readFile();
         Settings.GAMEROOT = new Group();
 
         //create the game scene

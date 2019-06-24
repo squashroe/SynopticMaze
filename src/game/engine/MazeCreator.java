@@ -1,7 +1,6 @@
 package game.engine;
 
 import game.configurations.Settings;
-import game.items.Threat;
 import game.items.Treasure;
 import game.rooms.Door;
 import game.rooms.Passage;
@@ -18,7 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -41,9 +39,7 @@ public class MazeCreator {
                 //player Input
                 Settings.getPLAYER().move();
                 isPlayerCollidingWithDoor();
-                // System.out.println("playerX: " + Settings.getPLAYER().getX());
                 collisionsWithTreasure();
-               // System.out.println(Settings.getPLAYER().getAction().isSword());
 
             }
         };
@@ -64,7 +60,7 @@ public class MazeCreator {
         gameInput.addListeners();
     }
 
-    public Pane createStartingRoom() {
+    private Pane createStartingRoom() {
         Random rand = new Random();
         RoomDesigner roomDesigner = new RoomDesigner();
         int randomRoomId = rand.nextInt(Settings.ROOM_LIST.size() - 1) + 1;
@@ -81,8 +77,7 @@ public class MazeCreator {
             if (Settings.getPLAYER().collidesWith(treasure)) {
                 Settings.getPLAYER().collectTreasure(treasure);
                 treasure.getImage().relocate(9999, 9999);//cheap way to get rid of treasure
-                    toRemove.add(treasure);
-                System.out.println(Settings.TOTAL_WEALTH);
+                toRemove.add(treasure);
             }
         }
         Settings.treasuresInCurrentRoom.removeAll(toRemove);
@@ -91,7 +86,7 @@ public class MazeCreator {
     /**
      * checks if the player is going through any of the doors
      */
-    public static void isPlayerCollidingWithDoor() {
+    private static void isPlayerCollidingWithDoor() {
         boolean collideNorthDoor = comparePlayerCoordinates((Settings.SCENE_WIDTH / 2), 0.0);
         boolean collideEastDoor = comparePlayerCoordinates(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT / 2);
         boolean collideSouthDoor = comparePlayerCoordinates(Settings.SCENE_WIDTH / 2, Settings.SCENE_HEIGHT);
@@ -118,7 +113,7 @@ public class MazeCreator {
      *
      * @return
      */
-    public static void changePaneThroughPassage() {
+    private static void changePaneThroughPassage() {
 
         Door door = getDoorFromRoom();
 
@@ -150,12 +145,10 @@ public class MazeCreator {
             Settings.GAME_PANE = roomDesigner.createRoomPane(passage.getFromRoomId());
         }
 
-        //
-        if (passage.isExit() || Settings.GAME_COMPLETE){
+        if (passage.isExit() || Settings.GAME_COMPLETE) {
             Settings.GAME_COMPLETE = true;
             Settings.GAME_PANE.getChildren().add(createCompleteGamePane());
         }
-
 
         if (changedRoom) {
             Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE);
@@ -164,7 +157,7 @@ public class MazeCreator {
     }
 
 
-    public static Door getDoorFromRoom() {
+    private static Door getDoorFromRoom() {
         //detect which room / door I am at
         //get the door and pass it into changePaneThroughPassage()
         //store THAT as a Pane and pass it back to the
@@ -182,7 +175,7 @@ public class MazeCreator {
         if (comparePlayerCoordinates(0.0, Settings.SCENE_HEIGHT / 2)) {
             return room.getDoorWest();
         }
-        return null; // always want a door to be passed back
+        return null;
     }
 
     private static boolean comparePlayerCoordinates(Double mapX, Double mapY) {
@@ -198,19 +191,15 @@ public class MazeCreator {
         return collidedWithDoor;
     }
 
-    public int setAmountOfThreats() {
-        //TODO : get amount of threats per room from config
-        return -1;
-    }
 
-    public static Pane createCompleteGamePane () {
+    private static Pane createCompleteGamePane() {
         Pane completeGamePane = new Pane();
         Text completeGameMessage = new Text();
         completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
         completeGameMessage.setStroke(Color.BLACK);
         completeGameMessage.setFill(Color.YELLOW);
         completeGameMessage.relocate(100, 100);
-        completeGameMessage.setText("Congratulations \n" + Settings.getPLAYER().getPlayerName());
+        completeGameMessage.setText("Congratulations \n" + Settings.PLAYER_NAME);
         completeGameMessage.setBoundsType(TextBoundsType.VISUAL);
         //add in score
         Text scoreMessage = new Text();
@@ -218,11 +207,11 @@ public class MazeCreator {
         scoreMessage.setStroke(Color.BLACK);
         scoreMessage.setFill(Color.BLACK);
         scoreMessage.relocate(100, 300);
-        scoreMessage.setText("Total Wealth: "+ Settings.TOTAL_WEALTH);
+        scoreMessage.setText("Total Wealth: " + Settings.TOTAL_WEALTH);
         scoreMessage.setBoundsType(TextBoundsType.VISUAL);
 
         //add in instructions to quit and start again?!
-        Text returnToMenuMessage =new Text();
+        Text returnToMenuMessage = new Text();
         returnToMenuMessage.setFont(Settings.FONT);
         returnToMenuMessage.setStroke(Color.BLACK);
         returnToMenuMessage.setFill(Color.BLACK);

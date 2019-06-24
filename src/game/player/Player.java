@@ -58,12 +58,6 @@ public class Player {
 
     }
 
-    public void checkIfICanSpawnInRoom() {
-        if (Settings.CHANGE_ROOM_COUNTER == 1) {
-
-        }
-    }
-
     public void spawnInRoom(int newDoorToSpawnAt) {
         switch (newDoorToSpawnAt) {
             case (0):
@@ -186,18 +180,6 @@ public class Player {
 
     public Action getAction() {
         return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
 
     public boolean collidesWith(Treasure treasure) {

@@ -24,7 +24,7 @@ public class Settings {
     public static double PLAYERXLOCATION = 32;
     public static double PLAYERYLOCATION = 32;
     private static Player PLAYER = new Player(PLAYERXLOCATION, PLAYERYLOCATION);
-    public static final String PLAYER_NAME = "Josh";
+    public static String PLAYER_NAME = "Josh Roe";
     public static int TOTAL_WEALTH;
 
     //TODO: change the font to something really cool
@@ -44,11 +44,6 @@ public class Settings {
 
     public static int MAX_THREATS_PER_ROOM = 5;
     public static List<Threat> threatsInCurrentRoom = new ArrayList<>();
-    public static int AMOUNT_OF_THREATS_CURRENT_ROOM = 0;
-
-    public static int MAZE_ROOM_WIDTH = 3;
-    public static int MAZE_ROOM_HEIGHT = 3;
-
     public static boolean ESCPRESSED;
 
     public static HashMap<Integer, Room> ROOM_LIST = createAllRooms();
