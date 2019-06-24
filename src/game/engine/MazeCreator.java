@@ -1,12 +1,14 @@
 package game.engine;
 
 import game.configurations.Settings;
+import game.items.Threat;
 import game.items.Treasure;
 import game.rooms.Door;
 import game.rooms.Passage;
 import game.rooms.Room;
 import game.rooms.RoomDesigner;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -23,34 +26,9 @@ public class MazeCreator {
 
     static boolean changeDoorTrigger = false;
     static boolean checkDoor = true;
-    private static boolean doorsUnlocked = true; // true for now, but needs to start false so that dealing with all threats means something
     private static boolean changedRoom;
 
     public MazeCreator() {
-    }
-    //here you can create the rooms
-    //from that you can then call the doors from the rooms
-    //from that you can then call the passages from the doors
-    //then pass down the room ID for the passage to know where to send you based on which door you entered.
-
-    public void createGameScene() {
-        //make the game and player field
-        Settings.GAME_PANE = createStartingRoom();
-        Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
-
-        //create the Scene with the game related stuff
-        Settings.GAMESCENE = new Scene(Settings.GAMEROOT, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-    }
-
-    public Pane createStartingRoom() {
-        Random rand = new Random();
-        RoomDesigner roomDesigner = new RoomDesigner();
-        int randomRoomId = rand.nextInt(Settings.ROOM_LIST.size() - 1) + 1;
-        // set the current room ID for future look up
-        return roomDesigner.createRoomPane(randomRoomId);
-        // - 1 because we don't want to start in room 8 as that's the finish
-        //and +1 so we don't have 0
-
     }
 
     /**
@@ -65,31 +43,46 @@ public class MazeCreator {
                 isPlayerCollidingWithDoor();
                 // System.out.println("playerX: " + Settings.getPLAYER().getX());
                 collisionsWithTreasure();
-                //  collisionsWithThreats();
+               // System.out.println(Settings.getPLAYER().getAction().isSword());
 
             }
         };
         gameLoop.start();
     }
 
+    public void createGameScene() {
+        //make the game and player field
+        Settings.GAME_PANE = createStartingRoom();
+        Group gameRoot = new Group();
+        Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
+
+        //create the Scene with the game related stuff
+        Settings.GAMESCENE = new Scene(Settings.GAMEROOT, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+
+        //set up listener for input from user on game scene
+        GameInput gameInput = new GameInput(Settings.GAMESCENE);
+        gameInput.addListeners();
+    }
+
+    public Pane createStartingRoom() {
+        Random rand = new Random();
+        RoomDesigner roomDesigner = new RoomDesigner();
+        int randomRoomId = rand.nextInt(Settings.ROOM_LIST.size() - 1) + 1;
+        // set the current room ID for future look up
+        return roomDesigner.createRoomPane(randomRoomId);
+        // - 1 because we don't want to start in room 8 as that's the finish
+        //and +1 so we don't have 0
+
+    }
+
     private static void collisionsWithTreasure() {
         List<Treasure> toRemove = new ArrayList();
         for (Treasure treasure : Settings.treasuresInCurrentRoom) {
             if (Settings.getPLAYER().collidesWith(treasure)) {
-                boolean collectedTreasure = false;
                 Settings.getPLAYER().collectTreasure(treasure);
                 treasure.getImage().relocate(9999, 9999);//cheap way to get rid of treasure
-
                     toRemove.add(treasure);
-
                 System.out.println(Settings.TOTAL_WEALTH);
-                //Settings.treasuresInCurrentRoom.remove(treasure.getId());
-                //remove treasure in settings lst with the id
-
-//                Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
-//
-//                //create the Scene with the game related stuff
-//                Settings.GAMESCENE = new Scene(Settings.GAMEROOT, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
             }
         }
         Settings.treasuresInCurrentRoom.removeAll(toRemove);
@@ -104,19 +97,20 @@ public class MazeCreator {
         boolean collideSouthDoor = comparePlayerCoordinates(Settings.SCENE_WIDTH / 2, Settings.SCENE_HEIGHT);
         boolean collideWestDoor = comparePlayerCoordinates(0.0, Settings.SCENE_HEIGHT / 2);
         if (collideNorthDoor || collideEastDoor || collideSouthDoor || collideWestDoor) {
-            checkDoor = true; // this makes the check door stop giving a null pointer when it runs again after f=moving the player
+            checkDoor = true; // this makes the check door stop giving a null pointer when it runs again after
+            // moving the player
             changeDoorTrigger = true;
             Settings.CHANGE_ROOM_COUNTER++;
         }
 
-        if (Settings.CHANGE_ROOM_COUNTER == 1 && checkDoor && doorsUnlocked) {
+        //added an equals 1 condition that counts so that the method only runs once.
+        if (Settings.CHANGE_ROOM_COUNTER == 1 && checkDoor && Settings.doorsUnlocked) {
             changePaneThroughPassage();
         }
         if (!changeDoorTrigger) {
             Settings.CHANGE_ROOM_COUNTER = 0;
         }
         changeDoorTrigger = false;
-
     }
 
     /**
@@ -204,11 +198,6 @@ public class MazeCreator {
         return collidedWithDoor;
     }
 
-
-    public void createTreasure() {
-
-    }
-
     public int setAmountOfThreats() {
         //TODO : get amount of threats per room from config
         return -1;
@@ -217,15 +206,15 @@ public class MazeCreator {
     public static Pane createCompleteGamePane () {
         Pane completeGamePane = new Pane();
         Text completeGameMessage = new Text();
-        completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 64));
+        completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
         completeGameMessage.setStroke(Color.BLACK);
         completeGameMessage.setFill(Color.YELLOW);
         completeGameMessage.relocate(100, 100);
-        completeGameMessage.setText("GAME WINNER");
+        completeGameMessage.setText("Congratulations \n" + Settings.getPLAYER().getPlayerName());
         completeGameMessage.setBoundsType(TextBoundsType.VISUAL);
         //add in score
         Text scoreMessage = new Text();
-        scoreMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
+        scoreMessage.setFont(Font.font(null, FontWeight.BOLD, 44));
         scoreMessage.setStroke(Color.BLACK);
         scoreMessage.setFill(Color.BLACK);
         scoreMessage.relocate(100, 300);

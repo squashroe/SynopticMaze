@@ -15,20 +15,14 @@ import java.util.Random;
 
 public class RoomDesigner {
 
-    private Canvas canvas = new Canvas(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-    private GraphicsContext gc;
-    private boolean thisRoomVisited;
-
     public RoomDesigner() {
-        gc = canvas.getGraphicsContext2D();
     }
-
 
     public Pane createRoomPane(int roomId) {
         Settings.CURRENT_ROOM_ID = roomId;
         System.out.println("Current roomId : " + roomId);
-        Pane root = new Pane();
-        root.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        Pane pane = new Pane();
+        pane.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
         Rectangle bg = new Rectangle(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
         if ((roomId % 2) == 0) {
             bg.setFill(Color.SADDLEBROWN);
@@ -38,11 +32,11 @@ public class RoomDesigner {
         }
         if (roomId == 9) {
             bg.setFill(Color.RED);
-            root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage());
+            pane.getChildren().addAll(bg, createDoors(),
+                    Settings.getPLAYER().getPlayerImage()); //Settings.getPLAYER().getPlayerImage(),
             // say well done you completed hte game
-            return root;
+            return pane;
         }
-        //System.out.println("room: "+roomId+"visited = "+Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).isVisited());
         //TODO: add detail to floor
 
         //add treasure
@@ -54,10 +48,10 @@ public class RoomDesigner {
         Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).setVisited(true);
 
         //adds the background, doors, player, treasure and threats to the pane
-        root.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(),
+        pane.getChildren().addAll(bg, createDoors(), Settings.getPLAYER().getPlayerImage(),
                 treasureLayer, threatLayer);
         Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).setVisited(true);
-        return root;
+        return pane;
     }
 
 
@@ -65,7 +59,7 @@ public class RoomDesigner {
         Pane doorLayer = new Pane();
         Rectangle doorNorth = new Rectangle(40, 20);
         doorNorth.relocate(Settings.SCENE_WIDTH / 2 - 20, 0);
-        //TODO: colour doors
+        //TODO: colour doors with better graphics
 
         Rectangle doorEast = new Rectangle(20, 40);
         doorEast.relocate(Settings.SCENE_WIDTH - 20, Settings.SCENE_HEIGHT / 2 - 20);
@@ -109,11 +103,17 @@ public class RoomDesigner {
         Random rand = new Random();
         //add threats
         int amountInRoom = rand.nextInt(Settings.MAX_THREATS_PER_ROOM);
-
+        List<Threat> threatsInRoom = new ArrayList<>();
         for (int i = 0; i < amountInRoom; i++) {
             Threat threat = new Threat(i, rand.nextInt((int) Settings.SCENE_WIDTH - 80),
                     rand.nextInt((int) Settings.SCENE_HEIGHT - 80), rand.nextInt(3));
+            threatsInRoom.add(threat);
             threatLayer.getChildren().add(threat.getImage());
+        }
+        Settings.threatsInCurrentRoom = threatsInRoom;
+        Settings.doorsUnlocked = false;
+        if(amountInRoom == 0){
+            Settings.doorsUnlocked = true;
         }
         return threatLayer;
     }

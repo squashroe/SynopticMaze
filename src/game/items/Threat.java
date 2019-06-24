@@ -16,6 +16,7 @@ public class Threat extends Item {
 
     public Threat(int id, double x, double y, int type) {
         super(id, x, y);
+        this.type = type;
         createTypeOfThreat(type);
         getImage().relocate(x, y);
     }

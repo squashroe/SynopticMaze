@@ -1,6 +1,7 @@
 package game.engine;
 
 import game.configurations.Settings;
+import game.menus.ScreenController;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -10,8 +11,11 @@ public class GameInput {
 
 
         private Boolean escReleased = true;
+        private Boolean sReleased = true;
+        private Boolean dReleased = true;
+        private Boolean fReleased = true;
 
-        private Scene scene;
+    private Scene scene;
 
         public GameInput(Scene scene) {
             this.scene = scene;
@@ -36,6 +40,7 @@ public class GameInput {
             public void handle(KeyEvent event) {
                 // register key down
 
+
                 if (event.getCode() == KeyCode.UP) {
                     Settings.getPLAYER().setMoveUp(true);
                 }
@@ -49,7 +54,7 @@ public class GameInput {
                     Settings.getPLAYER().setMoveRight(true);
                 }
 
-
+                //toggle the escape button
                 if ((event.getCode() == KeyCode.ESCAPE) && escReleased  && Settings.ESCPRESSED) {
                     escReleased = false;
                     Settings.ESCPRESSED = false;
@@ -60,7 +65,27 @@ public class GameInput {
                     escReleased = false;
                     Settings.ESCPRESSED = true;
                     System.out.println(Settings.ESCPRESSED);
+                    ScreenController.backToMenu();
                 }
+
+                //actions
+                if (event.getCode() == KeyCode.S && sReleased) {
+                    sReleased = false;
+                    Settings.getPLAYER().getAction().useSword();
+                    Settings.getPLAYER().defeatThreats();
+                }
+
+                if (event.getCode() == KeyCode.D && dReleased) {
+                    dReleased = false;
+                    Settings.getPLAYER().getAction().disarm();
+                    Settings.getPLAYER().defeatThreats();
+                }
+                if (event.getCode() == KeyCode.F && fReleased) {
+                    fReleased = false;
+                    Settings.getPLAYER().getAction().useNet();
+                    Settings.getPLAYER().defeatThreats();
+                }
+
             }
         };
 
@@ -86,6 +111,20 @@ public class GameInput {
 
                 if(event.getCode() == KeyCode.ESCAPE){
                     escReleased = true;
+                }
+
+                //action events
+                if (event.getCode() == KeyCode.S) {
+                    sReleased = true;
+                    Settings.getPLAYER().getAction().setSword(false);
+                }
+                if (event.getCode() == KeyCode.D) {
+                    dReleased = true;
+                    Settings.getPLAYER().getAction().setDisarm(false);
+                }
+                if (event.getCode() == KeyCode.F) {
+                    fReleased = true;
+                    Settings.getPLAYER().getAction().setNet(false);
                 }
             }
         };

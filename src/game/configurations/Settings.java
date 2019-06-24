@@ -14,18 +14,18 @@ import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class Settings {
+
 
     //TODO : make all fields private
 
     public static double PLAYERXLOCATION = 32;
     public static double PLAYERYLOCATION = 32;
     private static Player PLAYER = new Player(PLAYERXLOCATION, PLAYERYLOCATION);
-    public static final String PLAYER_NAME = "Read From File";
-
+    public static final String PLAYER_NAME = "Josh";
+    public static int TOTAL_WEALTH;
 
     //TODO: change the font to something really cool
     public static Font FONT = Font.font("", FontWeight.BOLD, 18);
@@ -34,16 +34,17 @@ public class Settings {
     public static double SCENE_HEIGHT = 640;
     public static Group GAMEROOT;
     public static Scene GAMESCENE;
+    public static Scene MENUSCENE;
     public static Pane GAME_PANE;
     public static boolean GAME_COMPLETE = false;
-
 
     public static int MAX_TREASURE_PER_ROOM = 5;
     public static List<Treasure> treasuresInCurrentRoom = new ArrayList<>();
     public static HashMap<Integer, Pane> roomTreasurePaneList = new HashMap<>();
 
     public static int MAX_THREATS_PER_ROOM = 5;
-    public List<Threat> threatsInCurrentRoom = new ArrayList<>();
+    public static List<Threat> threatsInCurrentRoom = new ArrayList<>();
+    public static int AMOUNT_OF_THREATS_CURRENT_ROOM = 0;
 
     public static int MAZE_ROOM_WIDTH = 3;
     public static int MAZE_ROOM_HEIGHT = 3;
@@ -53,6 +54,7 @@ public class Settings {
     public static HashMap<Integer, Room> ROOM_LIST = createAllRooms();
     public static int CURRENT_ROOM_ID = 0;
     public static int CHANGE_ROOM_COUNTER = 0;
+    public static boolean doorsUnlocked = true;
 
     public static HashMap<Integer, Passage> PASSAGE_LIST = createAllPassages();
 
@@ -60,9 +62,7 @@ public class Settings {
         return PLAYER;
     }
 
-    public static int TOTAL_WEALTH;
-
-    public static HashMap<Integer, Room> createAllRooms() {
+    private static HashMap<Integer, Room> createAllRooms() {
         HashMap<Integer, Room> tempRoomList = new HashMap<>();
         /*
          * rooms are laid out in a square array
