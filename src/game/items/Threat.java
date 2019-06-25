@@ -5,6 +5,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+/**
+ * This class will generate the threats in the game, there are currently
+ * 3 types of threats, but this could be expanded in the future.
+ */
 public class Threat extends Item {
 
     private int type;
@@ -57,11 +61,6 @@ public class Threat extends Item {
         setImage(batShape);
         setName("Bat");
     }
-
-    public Threat(int id, String name, double x, double y) {
-        super(id, name, x, y);
-    }
-
 
     @Override
     public int getId() {
@@ -121,10 +120,6 @@ public class Threat extends Item {
     @Override
     public void setType(int type) {
         this.type = type;
-    }
-
-    public boolean isDefeated() {
-        return defeated;
     }
 
     public void setDefeated(boolean defeated) {

@@ -3,8 +3,6 @@ package game.rooms;
 import game.configurations.Settings;
 import game.items.Threat;
 import game.items.Treasure;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,6 +16,12 @@ public class RoomDesigner {
     public RoomDesigner() {
     }
 
+    /**
+     * This will create the complete room layout, with doors, threats and treasure
+     *
+     * @param roomId the current room ID
+     * @return returns the whole room layout to the scene.
+     */
     public Pane createRoomPane(int roomId) {
         Settings.CURRENT_ROOM_ID = roomId;
         System.out.println("Current roomId : " + roomId);
@@ -28,10 +32,10 @@ public class RoomDesigner {
             bg.setFill(Color.SADDLEBROWN);
         }
         if ((roomId % 2) != 0) {
-            bg.setFill(Color.WHITE);
+            bg.setFill(Color.SANDYBROWN);
         }
         if (roomId == 9) {
-            bg.setFill(Color.RED);
+            bg.setFill(Color.ROSYBROWN);
             pane.getChildren().addAll(bg, createDoors(),
                     Settings.getPLAYER().getPlayerImage()); //Settings.getPLAYER().getPlayerImage(),
             // say well done you completed hte game
@@ -54,8 +58,11 @@ public class RoomDesigner {
         return pane;
     }
 
-
-    public Pane createDoors() {
+    /**
+     * creates N, E, S, W doors.
+     * @return returns the layer with the 4 doors on it
+     */
+    private Pane createDoors() {
         Pane doorLayer = new Pane();
         Rectangle doorNorth = new Rectangle(40, 20);
         doorNorth.relocate(Settings.SCENE_WIDTH / 2 - 20, 0);
@@ -75,11 +82,17 @@ public class RoomDesigner {
         return doorLayer;
     }
 
-    public Pane createTreasureLayer(int roomId) {
+    /**
+     * This will generate a random number of treasure, and return it as a layer.
+     * unless the room is already visited, then if any coins havent been collected it will display them.
+     * @param roomId the current room Id
+     * @return returns a layer of treasure
+     */
+    private Pane createTreasureLayer(int roomId) {
         Pane treasureLayer = new Pane();
 
         // if i have visited the room before, save the coins that had spawned originally
-        if(Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).isVisited()){
+        if (Settings.ROOM_LIST.get(Settings.CURRENT_ROOM_ID).isVisited()) {
             return Settings.roomTreasurePaneList.get(roomId);
         }
 
@@ -88,8 +101,8 @@ public class RoomDesigner {
         int amountInRoom = rand.nextInt(Settings.MAX_TREASURE_PER_ROOM);
         List<Treasure> treasuresInRoom = new ArrayList<>();
         for (int i = 0; i < amountInRoom; i++) {
-            Treasure treasure = new Treasure(i, (rand.nextInt((int) Settings.SCENE_WIDTH - 120)) +80,
-                    (rand.nextInt((int) Settings.SCENE_HEIGHT - 120))+ 80, rand.nextInt(3));
+            Treasure treasure = new Treasure(i, (rand.nextInt((int) Settings.SCENE_WIDTH - 120)) + 80,
+                    (rand.nextInt((int) Settings.SCENE_HEIGHT - 120)) + 80, rand.nextInt(3));
             treasuresInRoom.add(treasure);
             treasureLayer.getChildren().add(treasure.getImage());
         }
@@ -98,6 +111,11 @@ public class RoomDesigner {
         return treasureLayer;
     }
 
+    /**
+     * Generates a random number of threats (capped from config file)
+     * adds the threats to an array that can be looked at globally
+     * @return returns a random number of threats for each room
+     */
     private Pane createThreatLayer() {
         Pane threatLayer = new Pane();
         Random rand = new Random();
@@ -112,7 +130,7 @@ public class RoomDesigner {
         }
         Settings.threatsInCurrentRoom = threatsInRoom;
         Settings.doorsUnlocked = false;
-        if(amountInRoom == 0){
+        if (amountInRoom == 0) {
             Settings.doorsUnlocked = true;
         }
         return threatLayer;

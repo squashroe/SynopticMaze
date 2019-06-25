@@ -3,13 +3,11 @@ package game.menus;
 import game.configurations.Settings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,9 +24,7 @@ public class MainMenuController {
     public Pane createContent() {
         Pane root = new Pane();
         root.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-
         Rectangle bg = new Rectangle(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-
         ContentFrame frame = new ContentFrame(createBoxContent());
 
         HBox hbox = new HBox(frame);
@@ -40,7 +36,7 @@ public class MainMenuController {
 
         menuBox = new VBox(10.0,
                 new MenuItem("PLAY GAME"),
-                new MenuItem("OPTIONS"),
+                new MenuItem("RESTART"),
                 itemExit);
         menuBox.setAlignment(Pos.TOP_CENTER);
         menuBox.setTranslateX(250);
@@ -48,11 +44,10 @@ public class MainMenuController {
 
         Text about = new Text("Made by \nOlde Worlde Phunne");
         about.setTranslateX(20);
-        about.setTranslateY(Settings.SCENE_HEIGHT-50);
+        about.setTranslateY(Settings.SCENE_HEIGHT - 50);
         about.setFill(Color.WHITE);
         about.setFont(Settings.FONT);
         about.setOpacity(0.2);
-
 
         getMenuItem(0).setActive(true);
 
@@ -60,10 +55,12 @@ public class MainMenuController {
         return root;
     }
 
+    //chooses the menu items when in main menu
     public MenuItem getMenuItem(int index) {
         return (MenuItem) menuBox.getChildren().get(index);
     }
 
+    //creates the top box
     private Node createBoxContent() {
         Text completeGameMessage = new Text();
         completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
@@ -82,6 +79,7 @@ public class MainMenuController {
         return menuBox;
     }
 
+    //nested class for the frames for the boxes in the main menu
     private static class ContentFrame extends StackPane {
         private ContentFrame(Node content) {
             setAlignment(Pos.CENTER_LEFT);

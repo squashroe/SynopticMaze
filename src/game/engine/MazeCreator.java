@@ -22,9 +22,9 @@ import java.util.Random;
 
 public class MazeCreator {
 
-    static boolean changeDoorTrigger = false;
-    static boolean checkDoor = true;
-    private static boolean changedRoom;
+    private static boolean changeDoorTrigger = false;
+    private static boolean checkDoor = true;
+    private static Text text;
 
     public MazeCreator() {
     }
@@ -46,10 +46,12 @@ public class MazeCreator {
         gameLoop.start();
     }
 
+    /**
+     * creates the UI for the maze and pushed it to the stage
+     */
     public void createGameScene() {
         //make the game and player field
         Settings.GAME_PANE = createStartingRoom();
-        Group gameRoot = new Group();
         Settings.GAMEROOT.getChildren().addAll(Settings.GAME_PANE, Settings.getPLAYER().getPlayerImage());
 
         //create the Scene with the game related stuff
@@ -60,7 +62,11 @@ public class MazeCreator {
         gameInput.addListeners();
     }
 
-    private Pane createStartingRoom() {
+    /**
+     * makes the first room for the above method to call
+     * @return returns the room Pane
+     */
+    public Pane createStartingRoom() {
         Random rand = new Random();
         RoomDesigner roomDesigner = new RoomDesigner();
         int randomRoomId = rand.nextInt(Settings.ROOM_LIST.size() - 1) + 1;
@@ -71,6 +77,9 @@ public class MazeCreator {
 
     }
 
+    /**
+     * detects if the players location is the same as any treasure
+     */
     private static void collisionsWithTreasure() {
         List<Treasure> toRemove = new ArrayList();
         for (Treasure treasure : Settings.treasuresInCurrentRoom) {
@@ -110,8 +119,6 @@ public class MazeCreator {
 
     /**
      * changes the Pane so that the room changes
-     *
-     * @return
      */
     private static void changePaneThroughPassage() {
 
@@ -120,14 +127,16 @@ public class MazeCreator {
         Passage passage = Settings.PASSAGE_LIST.get(door.getPassageId());
 
         if (passage.getId() == 99) {
-            //TODO : print message to screen
+            doorNotUsable();
             System.out.println("You cannot go this way.");
+
         }
+
         //Room I am currently in
         int currentRoomId = door.getParentRoomId();
 
         int newDoorToSpawnAt = 0;
-        changedRoom = false;
+        boolean changedRoom = false;
         RoomDesigner roomDesigner = new RoomDesigner();
 
         //if the room i am in is the same as the "room from" in passage, go to "room to" in passage
@@ -156,7 +165,10 @@ public class MazeCreator {
         checkDoor = false;
     }
 
-
+    /**
+     * Gets the room from a global list of all rooms, and checks what door the player is at
+     * @return the door that the player is next to
+     */
     private static Door getDoorFromRoom() {
         //detect which room / door I am at
         //get the door and pass it into changePaneThroughPassage()
@@ -178,6 +190,10 @@ public class MazeCreator {
         return null;
     }
 
+    /**
+     * does the comparison of player's x, y coordinates with that of the map
+     * @return returns a boolean if it is near a door
+     */
     private static boolean comparePlayerCoordinates(Double mapX, Double mapY) {
         boolean collidedWithDoor = false;
         boolean collideWithDoorX = (Settings.getPLAYER().getX() >= mapX - 40) && (Settings.getPLAYER().getX() <= mapX + 40);
@@ -191,11 +207,15 @@ public class MazeCreator {
         return collidedWithDoor;
     }
 
-
+    /**
+     * when you complete the game(go to the last room) this method is called
+     * It displays a message and instructs you to go back to main menu to start again.
+     * @return a pane that has the completed game message on it to display on the screen.
+     */
     private static Pane createCompleteGamePane() {
         Pane completeGamePane = new Pane();
         Text completeGameMessage = new Text();
-        completeGameMessage.setFont(Font.font(null, FontWeight.BOLD, 54));
+        completeGameMessage.setFont(Font.font("Alegreya Sans SC", FontWeight.BOLD, 54));
         completeGameMessage.setStroke(Color.BLACK);
         completeGameMessage.setFill(Color.YELLOW);
         completeGameMessage.relocate(100, 100);
@@ -203,7 +223,7 @@ public class MazeCreator {
         completeGameMessage.setBoundsType(TextBoundsType.VISUAL);
         //add in score
         Text scoreMessage = new Text();
-        scoreMessage.setFont(Font.font(null, FontWeight.BOLD, 44));
+        scoreMessage.setFont(Font.font("Alegreya Sans SC", FontWeight.BOLD, 44));
         scoreMessage.setStroke(Color.BLACK);
         scoreMessage.setFill(Color.BLACK);
         scoreMessage.relocate(100, 300);
@@ -215,12 +235,23 @@ public class MazeCreator {
         returnToMenuMessage.setFont(Settings.FONT);
         returnToMenuMessage.setStroke(Color.BLACK);
         returnToMenuMessage.setFill(Color.BLACK);
-        returnToMenuMessage.relocate(100, 500);
-        returnToMenuMessage.setText("Return to menu to create new maze");
+        returnToMenuMessage.relocate(100, 400);
+        returnToMenuMessage.setText("Return to main menu to restart new maze\n" +
+                "Or Change the settings in the config file and try again!");
         returnToMenuMessage.setBoundsType(TextBoundsType.VISUAL);
 
         completeGamePane.getChildren().addAll(completeGameMessage, scoreMessage, returnToMenuMessage);
         return completeGamePane;
     }
+
+    public static void doorNotUsable() {
+        text = new Text("You may not go that way");
+        text.setFont(Font.font("Alegreya Sans SC", FontWeight.BOLD, 24));
+        text.setStroke(Color.BLACK);
+        text.setFill(Color.WHITE);
+        text.relocate(50, 50);
+        Settings.GAME_PANE.getChildren().add(text);
+    }
+
 
 }

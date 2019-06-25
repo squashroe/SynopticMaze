@@ -6,11 +6,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * class that generates items within the list of options in main menu
+ */
 public class MenuItem extends HBox {
     private Text text;
     private Runnable script;
 
-    public MenuItem(String name) {
+    MenuItem(String name) {
         super(15);
         setAlignment(Pos.CENTER);
 
@@ -26,7 +29,7 @@ public class MenuItem extends HBox {
         text.setFill(b ? Color.WHITE : Color.GREY);
     }
 
-    public void setOnActivate(Runnable r) {
+    void setOnActivate(Runnable r) {
         script = r;
     }
 

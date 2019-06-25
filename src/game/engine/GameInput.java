@@ -17,11 +17,11 @@ public class GameInput {
 
     private Scene scene;
 
-        public GameInput(Scene scene) {
+        GameInput(Scene scene) {
             this.scene = scene;
         }
 
-        public void addListeners() {
+        void addListeners() {
             scene.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
             scene.addEventFilter(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
 
@@ -128,12 +128,4 @@ public class GameInput {
                 }
             }
         };
-
-        public Boolean getEscReleased() {
-            return escReleased;
-        }
-
-        public void setEscReleased(Boolean escReleased) {
-            this.escReleased = escReleased;
-        }
 }

@@ -4,26 +4,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+/**
+ * Treasure Class for the coins in the game
+ */
 public class Treasure extends Item {
 
     private int value;
     private int radius;
-    private boolean pickedUp;
-
-
-    public Treasure() {
-        super();
-    }
 
     public Treasure(int id, double x, double y, int type) {
         super(id, x, y);
         createTypeOfCoin(type);
-        this.value = value;
         getImage().relocate(x, y);
     }
 
 
-    public void createTypeOfCoin(int type) {
+    private void createTypeOfCoin(int type) {
         switch (type) {
             case 0:
                 createCopperTreasure();
@@ -36,7 +32,7 @@ public class Treasure extends Item {
         }
     }
 
-    public void createGoldTreasure() {
+    private void createGoldTreasure() {
         radius = 18;
         Circle circle = new Circle(radius, Color.GOLD);
         circle.setStroke(Color.BLACK);
@@ -46,7 +42,7 @@ public class Treasure extends Item {
         setName("Gold");
     }
 
-    public void createSilverTreasure() {
+    private void createSilverTreasure() {
         radius = 12;
         Circle circle = new Circle(radius, Color.SILVER);
         circle.setStroke(Color.BLACK);
@@ -56,7 +52,7 @@ public class Treasure extends Item {
         setName("Silver");
     }
 
-    public void createCopperTreasure() {
+    private void createCopperTreasure() {
         radius = 6;
         Circle circle = new Circle(radius, Color.ROSYBROWN);
         circle.setStroke(Color.BLACK);
@@ -100,17 +96,12 @@ public class Treasure extends Item {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         this.value = value;
     }
 
     public int getRadius() {
         return radius;
     }
-
-    public void dropItem() {
-
-    }
-
 
 }

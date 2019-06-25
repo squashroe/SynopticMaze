@@ -2,6 +2,9 @@ package game.items;
 
 import javafx.scene.shape.Shape;
 
+/**
+ * Base class for the Treasure and Threat Classes
+ */
 public class Item {
 
     private int id;
@@ -11,16 +14,16 @@ public class Item {
     private double y;
     private int type;
 
-    public Item() {
+    Item() {
     }
 
-    public Item(int id, double x, double y) {
+    Item(int id, double x, double y) {
         this.id = id;
         this.x = x;
         this.y = y;
     }
 
-    public Item(int id, String name, double x, double y) {
+    Item(int id, String name, double x, double y) {
         this.id = id;
         this.name = name;
         this.x = x;

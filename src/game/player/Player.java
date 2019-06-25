@@ -8,18 +8,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * player class holds all information to do with player
+ */
 public class Player {
 
-    private double x; // TODO : set a random location in the starting Room
+    private double x;
     private double y;
     private int speed = 7;
     private Shape playerImage;
-    private int imageSize = 32;
     private String playerName = Settings.PLAYER_NAME;
     private boolean moveUp = false;
     private boolean moveDown = false;
@@ -41,13 +42,15 @@ public class Player {
         action = new Action();
     }
 
-    public Shape createPlayerImage() {
+    private Shape createPlayerImage() {
+        int imageSize = 32;
         Rectangle rect = new Rectangle(imageSize, imageSize);
         rect.setFill(Color.GREEN);
         this.playerImage = rect;
         return playerImage;
     }
 
+    //checks the movement and boundaries where the player can move to
     public void move() {
         moveUp();
         moveDown();
@@ -55,9 +58,9 @@ public class Player {
         moveRight();
 
         checkBounds();
-
     }
 
+    //controls where the player spawns when going through a passage
     public void spawnInRoom(int newDoorToSpawnAt) {
         switch (newDoorToSpawnAt) {
             case (0):
@@ -83,35 +86,36 @@ public class Player {
         }
     }
 
-    public void moveUp() {
+    private void moveUp() {
         if (moveUp) {
             y -= speed;
             playerImage.relocate(x, y);
         }
     }
 
-    public void moveDown() {
+    private void moveDown() {
         if (moveDown) {
             y += speed;
             playerImage.relocate(x, y);
         }
     }
 
-    public void moveLeft() {
+    private void moveLeft() {
         if (moveLeft) {
             x -= speed;
             playerImage.relocate(x, y);
         }
     }
 
-    public void moveRight() {
+    private void moveRight() {
         if (moveRight) {
             x += speed;
             playerImage.relocate(x, y);
         }
     }
 
-    public void checkBounds() {
+    //stops you moving out of the window
+    private void checkBounds() {
 
         /*
         using the number 7 here instead of 0 as my movement is 7.
@@ -139,8 +143,12 @@ public class Player {
         return playerImage;
     }
 
+    /*
+    This was created to see the label for the player, and was going to be developed for items as well.
+    Time constraints has made this feature not completed
+     */
     public StackPane getsp() {
-        Label nameLabel  = new Label(playerName, playerImage);
+        Label nameLabel = new Label(playerName, playerImage);
         StackPane r = new StackPane();
         r.getChildren().add(nameLabel);
         return r;
@@ -170,11 +178,11 @@ public class Player {
         return y;
     }
 
-    public void setX(double x) {
+    private void setX(double x) {
         this.x = x;
     }
 
-    public void setY(double y) {
+    private void setY(double y) {
         this.y = y;
     }
 
@@ -182,17 +190,21 @@ public class Player {
         return action;
     }
 
+    //checks to see if the player is at the same coordinates as some treasure
     public boolean collidesWith(Treasure treasure) {
         return (treasure.getX() + treasure.getRadius() >= x && treasure.getY() + treasure.getRadius() >= y &&
                 treasure.getX() <= x + 40 && treasure.getY() <= y + 40);
     }
 
+    //add wealth of coin to the total wealth
     public void collectTreasure(Treasure treasure) {
         if (!Settings.GAME_COMPLETE) {
             Settings.TOTAL_WEALTH += treasure.getValue();
         }
     }
 
+    //when pressing a button, it will perform an action and defeat
+    //which ever enemy is present
     public void defeatThreats() {
         List<Threat> threatsToRemove = new ArrayList<>();
         for (Threat threat : Settings.threatsInCurrentRoom) {

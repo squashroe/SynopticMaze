@@ -18,18 +18,16 @@ import java.util.List;
 
 public class Settings {
 
-
-    //TODO : make all fields private
-
-    public static double PLAYERXLOCATION = 32;
-    public static double PLAYERYLOCATION = 32;
-    private static Player PLAYER = new Player(PLAYERXLOCATION, PLAYERYLOCATION);
+    //Player Settings
+    private static Player PLAYER = new Player(Settings.SCENE_WIDTH /2, Settings.SCENE_HEIGHT /2);
     public static String PLAYER_NAME = "Josh Roe";
     public static int TOTAL_WEALTH;
 
-    //TODO: change the font to something really cool
-    public static Font FONT = Font.font("", FontWeight.BOLD, 18);
 
+    //TODO: change the font to something really cool
+    public static Font FONT = Font.font("Alegreya Sans SC", FontWeight.BOLD, 18);
+
+    //Game play Settings
     public static double SCENE_WIDTH = 640;
     public static double SCENE_HEIGHT = 640;
     public static Group GAMEROOT;
@@ -37,25 +35,27 @@ public class Settings {
     public static Scene MENUSCENE;
     public static Pane GAME_PANE;
     public static boolean GAME_COMPLETE = false;
+    public static Player getPLAYER() {
+        return PLAYER;
+    }
 
+    //Treasure Settings
     public static int MAX_TREASURE_PER_ROOM = 5;
     public static List<Treasure> treasuresInCurrentRoom = new ArrayList<>();
     public static HashMap<Integer, Pane> roomTreasurePaneList = new HashMap<>();
 
+    //Threat Settings
     public static int MAX_THREATS_PER_ROOM = 5;
     public static List<Threat> threatsInCurrentRoom = new ArrayList<>();
     public static boolean ESCPRESSED;
 
+    //Room Settings
     public static HashMap<Integer, Room> ROOM_LIST = createAllRooms();
     public static int CURRENT_ROOM_ID = 0;
     public static int CHANGE_ROOM_COUNTER = 0;
     public static boolean doorsUnlocked = true;
-
     public static HashMap<Integer, Passage> PASSAGE_LIST = createAllPassages();
 
-    public static Player getPLAYER() {
-        return PLAYER;
-    }
 
     private static HashMap<Integer, Room> createAllRooms() {
         HashMap<Integer, Room> tempRoomList = new HashMap<>();
